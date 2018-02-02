@@ -1,4 +1,4 @@
-package com.relics.backend.relicsbackend;
+package com.relics.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

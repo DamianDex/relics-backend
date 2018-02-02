@@ -1,4 +1,4 @@
-package com.relics.backend.relicsbackend;
+package com.relics.backend;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

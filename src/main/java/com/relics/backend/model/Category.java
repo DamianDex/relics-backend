@@ -9,6 +9,8 @@ public class Category {
     @Id
     public String categoryName;
 
+    public String categoryDescription;
+
     public Category() {
     }
 
@@ -18,5 +20,13 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
     }
 }

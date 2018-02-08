@@ -1,5 +1,7 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,7 @@ public class Relic {
     public Double longitude;
 
     @OneToMany
+    @JsonIgnoreProperties(value = "categoryDescription")
     public Set<Category> categories;
 
     public Relic() {

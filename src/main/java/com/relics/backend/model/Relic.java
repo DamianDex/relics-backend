@@ -12,6 +12,16 @@ public class Relic {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
+    public String name;
+
     public Relic() {
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

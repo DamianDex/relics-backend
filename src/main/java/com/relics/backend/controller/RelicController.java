@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -54,6 +56,17 @@ public class RelicController {
         if (relic == null)
             return getNotFoundResponseEntity();
         return ResponseEntity.ok(relic);
+    }
+
+    @GetMapping("/relics/category/{categoryName}")
+    @ResponseBody
+    public List<Relic> getRelicsByCategoryName(@PathVariable(value = "categoryName") String categoryName) {
+        return relicRepository.findAll().stream().filter(new Predicate<Relic>() {
+            @Override
+            public boolean test(Relic relic) {
+                return true;
+            }
+        }).collect(Collectors.toList());
     }
 
     @DeleteMapping("/relics/{id}")

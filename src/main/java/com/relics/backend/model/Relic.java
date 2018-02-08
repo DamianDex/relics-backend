@@ -74,4 +74,12 @@ public class Relic {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
 }

@@ -71,7 +71,7 @@ public class RelicController {
     }
 
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {
-        oldRelic.setName(newRelic.getName());
+        oldRelic.setPlaceName(newRelic.getPlaceName());
         return oldRelic;
     }
 }

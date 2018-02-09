@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +18,6 @@ public class User {
     @OneToMany
     public Set<Review> reviews;
 
-    public User() {
+    public AppUser() {
     }
 }

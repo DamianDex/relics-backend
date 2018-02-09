@@ -24,7 +24,6 @@ public class Relic {
     public Double longitude;
 
     @OneToMany
-    @JsonIgnoreProperties(value = "categoryDescription")
     public Set<Category> categories;
 
     public Relic() {

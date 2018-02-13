@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
-public class CategoryController {
+public class CategoryController implements BasicController {
 
     @Autowired
     private CategoryRepository categoryRepository;

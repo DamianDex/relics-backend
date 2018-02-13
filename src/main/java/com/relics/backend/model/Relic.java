@@ -1,16 +1,15 @@
 package com.relics.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.util.Set;
 
 @Entity
@@ -27,12 +26,13 @@ public class Relic {
     public Double latitude;
     public Double longitude;
 
+    //TODO: Why I cannot persist category by defualt??!!
     @OneToMany
     @Cascade(CascadeType.PERSIST)
     public Set<Category> categories;
 
-    //@OneToMany
-    @ElementCollection //TODO: Doczytać co to robi !!!
+    @OneToMany
+    @Cascade(CascadeType.PERSIST)
     public Set<Review> reviews;
 
     public Relic() {
@@ -92,5 +92,13 @@ public class Relic {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
     }
 }

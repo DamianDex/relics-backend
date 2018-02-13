@@ -2,6 +2,7 @@ package com.relics.backend.controller;
 
 import com.relics.backend.model.Relic;
 import com.relics.backend.repository.RelicRepository;
+import com.relics.backend.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,10 +22,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-public class RelicController {
+public class RelicController implements BasicController {
 
     @Autowired
     private RelicRepository relicRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @PostMapping("/relics")
     public void createNewRelic(@Valid @RequestBody Relic relic) {
@@ -58,6 +62,7 @@ public class RelicController {
         return ResponseEntity.ok(relic);
     }
 
+    //TODO: Implement filter by category
     @GetMapping("/relics/category/{categoryName}")
     @ResponseBody
     public List<Relic> getRelicsByCategoryName(@PathVariable(value = "categoryName") String categoryName) {
@@ -77,10 +82,6 @@ public class RelicController {
             return getNotFoundResponseEntity();
         relicRepository.delete(relic);
         return ResponseEntity.ok(relic);
-    }
-
-    private ResponseEntity<Relic> getNotFoundResponseEntity() {
-        return ResponseEntity.notFound().build();
     }
 
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {

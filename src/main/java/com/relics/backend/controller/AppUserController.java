@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class AppUserController {
+public class AppUserController implements BasicController {
 
     @Autowired
     AppUserRepository appUserRepository;

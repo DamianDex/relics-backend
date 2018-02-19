@@ -23,9 +23,9 @@ public class Recommender {
     public static void main(String args[]){
         try{
             //Creating data model
-            DataModel datamodel = new FileDataModel(new File("aa"));
+            DataModel datamodel = new FileDataModel(new File("input.txt"));
 
-            //Creating UserSimilarity object.
+            //Creating UserSimilarity object
             UserSimilarity usersimilarity = new PearsonCorrelationSimilarity(datamodel);
 
             //Creating UserNeighbourHHood object.

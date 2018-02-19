@@ -31,9 +31,9 @@ public class Relic {
     @Cascade(CascadeType.PERSIST)
     public Set<Category> categories;
 
-    @OneToMany
-    @Cascade(CascadeType.PERSIST)
-    public Set<Review> reviews;
+//    @OneToMany
+//    @Cascade(CascadeType.PERSIST)
+//    public Set<Review> reviews;
 
     public Relic() {
     }
@@ -94,11 +94,11 @@ public class Relic {
         this.categories = categories;
     }
 
-    public void addReview(Review review) {
-        reviews.add(review);
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
+//    public void addReview(Review review) {
+//        reviews.add(review);
+//    }
+//
+//    public Set<Review> getReviews() {
+//        return reviews;
+//    }
 }

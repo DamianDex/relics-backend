@@ -15,9 +15,6 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @OneToMany
-    public Set<Review> reviews;
-
     public AppUser() {
     }
 }

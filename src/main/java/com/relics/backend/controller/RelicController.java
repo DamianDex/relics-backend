@@ -5,6 +5,7 @@ import com.relics.backend.repository.RelicRepository;
 import com.relics.backend.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ public class RelicController implements BasicController {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @CrossOrigin(value = "http://localhost:3000")
     @PostMapping("/relics")
     public void createNewRelic(@Valid @RequestBody Relic relic) {
         relicRepository.save(relic);

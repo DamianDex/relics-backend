@@ -28,7 +28,6 @@ public class Relic {
 
     //TODO: Why I cannot persist category by defualt??!!
     @OneToMany
-    @Cascade(CascadeType.PERSIST)
     public Set<Category> categories;
 
 //    @OneToMany

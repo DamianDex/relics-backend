@@ -45,7 +45,7 @@ public class RelicController implements BasicController {
         relic = updateRelic(relic, newRelic);
         relicRepository.save(relic);
         return ResponseEntity.ok(relic);
-    }
+        }
 
     @GetMapping("/relics")
     @ResponseBody
@@ -79,7 +79,7 @@ public class RelicController implements BasicController {
     }
 
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {
-        oldRelic.setPlaceName(newRelic.getPlaceName());
+        oldRelic.setIdentification(newRelic.getIdentification());
         return oldRelic;
     }
 }

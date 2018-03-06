@@ -7,20 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Review {
 
-    @JsonView(View.Summary.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @OneToOne
+    @OneToMany
     public Relic relic;
 
-    @OneToOne
+    @ManyToOne
     public AppUser appUser;
 
     public Integer rating;

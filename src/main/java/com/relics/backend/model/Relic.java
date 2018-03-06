@@ -1,5 +1,8 @@
 package com.relics.backend.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +22,7 @@ public class Relic {
     public String description;
 
     @OneToOne
+    @Cascade(CascadeType.PERSIST)
     public GeographicLocation geographicLocation;
 
     @OneToMany
@@ -42,5 +46,61 @@ public class Relic {
 
     public void setIdentification(String identification) {
         this.identification = identification;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public GeographicLocation getGeographicLocation() {
+        return geographicLocation;
+    }
+
+    public void setGeographicLocation(GeographicLocation geographicLocation) {
+        this.geographicLocation = geographicLocation;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getRegisterNumber() {
+        return registerNumber;
+    }
+
+    public void setRegisterNumber(String registerNumber) {
+        this.registerNumber = registerNumber;
+    }
+
+    public String getDatingOfObject() {
+        return datingOfObject;
+    }
+
+    public void setDatingOfObject(String datingOfObject) {
+        this.datingOfObject = datingOfObject;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 }

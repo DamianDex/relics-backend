@@ -18,7 +18,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
-    @OneToMany
+    @ManyToOne
     public Relic relic;
 
     @ManyToOne

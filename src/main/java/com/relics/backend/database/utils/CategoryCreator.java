@@ -30,7 +30,6 @@ public class CategoryCreator extends Creator {
                 System.out.println(category);
                 results.add(category);
             }
-
         }
         return results;
     }

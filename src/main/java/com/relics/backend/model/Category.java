@@ -6,6 +6,10 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -14,6 +18,9 @@ public class Category {
     public String categoryName;
 
     public String categoryDescription;
+
+    @ManyToMany (mappedBy = "categories")
+    public List<Relic> relics;
 
     public Category() {
     }

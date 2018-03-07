@@ -3,29 +3,36 @@ package com.relics.backend.model;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import java.util.Set;
 
 @Entity
+@SequenceGenerator(name = "sequence", initialValue = 1)
 public class Relic {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
     public Long id;
 
+    @Column(columnDefinition="TEXT")
     public String identification;
+
+    @Column(columnDefinition="TEXT")
     public String description;
 
     @OneToOne
     @Cascade(CascadeType.PERSIST)
     public GeographicLocation geographicLocation;
 
-    @OneToMany
+    @ManyToMany
     public Set<Category> categories;
 
     public String registerNumber;

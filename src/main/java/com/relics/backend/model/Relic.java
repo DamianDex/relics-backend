@@ -1,5 +1,7 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.relics.backend.View;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -20,9 +22,11 @@ public class Relic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @JsonView(View.Summary.class)
     public Long id;
 
     @Column(columnDefinition="TEXT")
+    @JsonView(View.Summary.class)
     public String identification;
 
     @Column(columnDefinition="TEXT")
@@ -109,5 +113,20 @@ public class Relic {
 
     public void setImages(Set<Image> images) {
         this.images = images;
+    }
+
+    @Override
+    public String toString() {
+        return "Relic{" +
+                "id=" + id +
+                ", identification='" + identification + '\'' +
+                ", description='" + description + '\'' +
+                ", geographicLocation=" + geographicLocation +
+                ", categories=" + categories +
+                ", registerNumber='" + registerNumber + '\'' +
+                ", datingOfObject='" + datingOfObject + '\'' +
+                ", reviews=" + reviews +
+                ", images=" + images +
+                '}';
     }
 }

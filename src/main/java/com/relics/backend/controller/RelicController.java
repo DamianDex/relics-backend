@@ -1,5 +1,7 @@
 package com.relics.backend.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.relics.backend.View;
 import com.relics.backend.model.Relic;
 import com.relics.backend.repository.RelicRepository;
 import com.relics.backend.repository.ReviewRepository;
@@ -53,10 +55,12 @@ public class RelicController implements BasicController {
         return relicRepository.findAll();
     }
 
+    @JsonView(View.Summary.class)
     @GetMapping("/relics/{id}")
     @ResponseBody
     public ResponseEntity<Relic> getRelicById(@PathVariable(value = "id") Long id) {
         Relic relic = relicRepository.findOne(id);
+        System.out.println(relic.toString());
         if (relic == null)
             return getNotFoundResponseEntity();
         return ResponseEntity.ok(relic);

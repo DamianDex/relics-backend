@@ -5,6 +5,7 @@ import com.relics.backend.View;
 import com.relics.backend.model.Relic;
 import com.relics.backend.repository.RelicRepository;
 import com.relics.backend.repository.ReviewRepository;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(value = "http://localhost:3000")
 public class RelicController implements BasicController {
 
     @Autowired
@@ -31,7 +34,6 @@ public class RelicController implements BasicController {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    @CrossOrigin(value = "http://localhost:3000")
     @PostMapping("/relics")
     public void createNewRelic(@Valid @RequestBody Relic relic) {
         relicRepository.save(relic);
@@ -53,6 +55,12 @@ public class RelicController implements BasicController {
     @ResponseBody
     public List<Relic> getAllRelics() {
         return relicRepository.findAll();
+    }
+
+    @GetMapping("/relics/random/{quantity}")
+    @ResponseBody
+    public List<BigInteger> getRandomRelicIDs(@PathVariable(value = "quantity") Integer quantity) {
+        return relicRepository.getRandomRelicIDs(quantity);
     }
 
     @JsonView(View.Summary.class)

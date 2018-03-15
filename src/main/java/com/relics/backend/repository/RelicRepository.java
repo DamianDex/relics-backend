@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -14,6 +15,10 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
     @Query(value = "SELECT * FROM relic\n" +
             "JOIN relic_categories ON relic.id = relic_categories.relic_id\n" +
             "WHERE relic_categories.categories_category_name = :category", nativeQuery = true)
-    public List<Relic> findByCategory(@Param("category") String category);
+    List<Relic> findByCategory(@Param("category") String category);
 
+    @Query(value = "SELECT id FROM relic\n" +
+            "ORDER BY random()" +
+            "LIMIT :quantity", nativeQuery = true)
+    List<BigInteger> getRandomRelicIDs(@Param("quantity") Integer quantity);
 }

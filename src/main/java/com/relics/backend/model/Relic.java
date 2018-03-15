@@ -22,14 +22,15 @@ public class Relic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-    @JsonView(View.Summary.class)
+    @JsonView(View.BasicDescription.class)
     public Long id;
 
     @Column(columnDefinition="TEXT")
-    @JsonView(View.Summary.class)
+    @JsonView(View.BasicDescription.class)
     public String identification;
 
     @Column(columnDefinition="TEXT")
+    @JsonView(View.BasicDescription.class)
     public String description;
 
     @OneToOne
@@ -39,7 +40,10 @@ public class Relic {
     @ManyToMany
     public Set<Category> categories;
 
+    @JsonView(View.BasicDescription.class)
     public String registerNumber;
+
+    @JsonView(View.BasicDescription.class)
     public String datingOfObject;
 
     @OneToMany

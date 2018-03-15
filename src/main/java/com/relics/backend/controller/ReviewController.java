@@ -38,7 +38,7 @@ public class ReviewController implements BasicController {
         return reviewRepository.findAllReviewByRelicId(id);
     }
 
-    @JsonView(View.Summary.class)
+    @JsonView(View.BasicDescription.class)
     @GetMapping("/relics/review")
     @ResponseBody
     public List<Review> getAllReviews() {

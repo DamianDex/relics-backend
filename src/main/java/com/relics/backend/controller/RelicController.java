@@ -5,7 +5,6 @@ import com.relics.backend.View;
 import com.relics.backend.model.Relic;
 import com.relics.backend.repository.RelicRepository;
 import com.relics.backend.repository.ReviewRepository;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,7 +62,7 @@ public class RelicController implements BasicController {
         return relicRepository.getRandomRelicIDs(quantity);
     }
 
-    @JsonView(View.Summary.class)
+    @JsonView(View.BasicDescription.class)
     @GetMapping("/relics/{id}")
     @ResponseBody
     public ResponseEntity<Relic> getRelicById(@PathVariable(value = "id") Long id) {

@@ -12,12 +12,12 @@ import java.util.List;
 @Repository
 public interface RelicRepository extends JpaRepository<Relic, Long> {
 
-    @Query(value = "SELECT * FROM relic\n" +
+    @Query(value = "SELECT * FROM public.relic\n" +
             "JOIN relic_categories ON relic.id = relic_categories.relic_id\n" +
             "WHERE relic_categories.categories_category_name = :category", nativeQuery = true)
     List<Relic> findByCategory(@Param("category") String category);
 
-    @Query(value = "SELECT id FROM relic\n" +
+    @Query(value = "SELECT id FROM public.relic\n" +
             "ORDER BY random()" +
             "LIMIT :quantity", nativeQuery = true)
     List<BigInteger> getRandomRelicIDs(@Param("quantity") Integer quantity);

@@ -27,6 +27,9 @@ public class FilterSecurityMetadataSource implements FilterInvocationSecurityMet
 	@Autowired
     AppUserRepository appUserRepository;
 	
+	@Autowired
+	LoginUtils loginUtils;
+	
 	List<ConfigAttribute> allUsers = new LinkedList<>();
 	Map<RequestMatcher, List<ConfigAttribute>> requestMap = null;
 	
@@ -55,8 +58,8 @@ public class FilterSecurityMetadataSource implements FilterInvocationSecurityMet
 		
 		List<ConfigAttribute> configAttributes = new ArrayList<>(0);
 		
-		User user = //appUserRepository.getUser();
-		new User();
+		User user = loginUtils.getLoggedUser();
+
 		if (user != null)
 			loadRequestMap();
 		

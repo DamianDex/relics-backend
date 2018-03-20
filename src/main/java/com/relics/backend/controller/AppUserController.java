@@ -20,6 +20,12 @@ public class AppUserController implements BasicController {
     public void createNewUser(@RequestBody User user) {
     	appUserRepository.addUser(user.getUsername(), user.getPassword());
     }
+    
+    @PostMapping("/my-profile/")
+    public void getProfileInfo() {
+    	
+    }
+
 
 //    @GetMapping("/user")
 //    @ResponseBody

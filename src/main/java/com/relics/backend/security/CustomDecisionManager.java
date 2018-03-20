@@ -28,6 +28,7 @@ public class CustomDecisionManager implements AccessDecisionManager{
 			System.out.println("Needed permision is: " + neededPermission);
 			for (GrantedAuthority ga: auth.getAuthorities()){
 				if (neededPermission.equals(ga.getAuthority()))
+					System.out.println("Authorization granted");
 					return;
 			}
 		}

@@ -18,11 +18,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "users", schema = "users")
+@SequenceGenerator(name = "sequence", initialValue = 1)
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="SEQMYCLASSID")
-    @SequenceGenerator(name="SEQMYCLASSID", sequenceName="SEQMYCLASSID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
     @Column(name = "id", updatable = false)
 	private long id;
 

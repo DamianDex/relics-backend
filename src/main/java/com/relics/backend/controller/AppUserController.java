@@ -21,9 +21,9 @@ public class AppUserController implements BasicController {
     	appUserRepository.addUser(user.getUsername(), user.getPassword());
     }
     
-    @PostMapping("/my-profile/")
-    public void getProfileInfo() {
-    	
+    @PostMapping("/my-profile")
+    public String getProfileInfo() {
+    	return "I'm logged!";
     }
 
 

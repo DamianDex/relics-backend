@@ -1,5 +1,8 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.relics.backend.View;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

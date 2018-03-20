@@ -127,7 +127,4 @@ public class User implements UserDetails {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", type=" + type + ", enabled="
 				+ enabled + ", uuid=" + uuid + "]";
 	}
-	
-	
-
 }

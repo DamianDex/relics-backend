@@ -34,6 +34,12 @@ public class ReviewController implements BasicController {
         reviewRepository.save(review);
     }
 
+    @GetMapping(value = "relics/{id}/review/{userId}")
+    @ResponseBody
+    public Boolean checkIfUserReviewRelic(@PathVariable(value = "id") Long id, @PathVariable(value = "userId") Long userid) {
+        return false;
+    }
+
     @GetMapping("/relics/{id}/review")
     @ResponseBody
     @JsonView(View.BasicDescription.class)

@@ -11,8 +11,8 @@ import com.relics.backend.model.User;
 public interface AppUserRepository extends JpaRepository<User, Long> {
 
 	@Query(value = "INSERT INTO users.users(\"username\", \"password\", \"uuid\") "
-			+ "VALUES(:username, :password, :uuid)", nativeQuery = true)
-	void addUser(@Param("username") String username, @Param("password") String password, @Param("uuid") String uuid);
+			+ "VALUES(:username, :password, :uuid) returning id", nativeQuery = true)
+	int addUser(@Param("username") String username, @Param("password") String password, @Param("uuid") String uuid);
 
 	@Query(value = "SELECT * FROM users.users WHERE username = :username", 
 			nativeQuery = true)
@@ -21,5 +21,9 @@ public interface AppUserRepository extends JpaRepository<User, Long> {
 	@Query(value = "SELECT * FROM users.users WHERE username = :username "
 			+ "and enabled = true", nativeQuery = true)
 	User getEnabledUser(@Param("username") String username);
+	
+	@Query(value = "SELECT EXISTS "
+			+ "(SELECT true FROM users.users WHERE username = :username)", nativeQuery=true)
+	boolean userExists(@Param("username") String username);
 
 }

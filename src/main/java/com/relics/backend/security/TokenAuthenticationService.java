@@ -1,5 +1,6 @@
 package com.relics.backend.security;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -15,6 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.relics.backend.model.User;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,19 +31,16 @@ class TokenAuthenticationService {
 	static final String SECRET = "TODO set uuid";
 	static final String TOKEN_PREFIX = "Bearer";
 	static final String HEADER_STRING = "Authorization";
+	static final ObjectMapper mapper = new ObjectMapper();
 
-	static void addAuthentication(HttpServletResponse res, String username,
-			Collection<? extends GrantedAuthority> roles) {
-		for (GrantedAuthority ga : roles) {
-			System.out.println(ga.getAuthority());
-		}
-
-		Claims claims = Jwts.claims().setSubject(username);
+	static void addAuthentication(HttpServletResponse res, User user,
+			Collection<? extends GrantedAuthority> roles) throws JsonProcessingException {
+		String userJson = mapper.writeValueAsString(user);
+		Claims claims = Jwts.claims().setSubject(userJson);
 		claims.put("scopes", roles);
 		
 		String JWT = Jwts.builder()
 				.setClaims(claims)
-				.setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET)
 			.compact();
@@ -44,11 +48,18 @@ class TokenAuthenticationService {
 	}
 
 	@SuppressWarnings("unchecked")
-	static Authentication getAuthentication(HttpServletRequest request) {
+	static Authentication getAuthentication(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
 		String token = request.getHeader(HEADER_STRING);
 		if (token != null) {
 			Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
-			String username = claims.getSubject();
+			String userJson = claims.getSubject();
+			User user = null;
+			try {
+				user = mapper.readValue(userJson, User.class);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			ArrayList<LinkedHashMap<String, String>> scope = (ArrayList<LinkedHashMap<String, String>>)claims.get("scopes");
 			List<GrantedAuthority> grantedAuthorities = scope
 					.stream()
@@ -56,7 +67,7 @@ class TokenAuthenticationService {
 					.map(auth -> new SimpleGrantedAuthority(auth))
 					.collect(Collectors.toList());
 
-			return username != null ? new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities) : null;
+			return user != null ? new UsernamePasswordAuthenticationToken(user, null, grantedAuthorities) : null;
 		}
 		return null;
 	}

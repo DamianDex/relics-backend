@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.relics.backend.model.User;
 import com.relics.backend.security.model.AccountCredentials;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
@@ -47,7 +48,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
-		TokenAuthenticationService.addAuthentication(res, auth.getName(), auth.getAuthorities());
+		TokenAuthenticationService.addAuthentication(res, (User) auth.getPrincipal(), auth.getAuthorities());
 		
 	}
 }

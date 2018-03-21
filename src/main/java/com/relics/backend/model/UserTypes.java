@@ -54,7 +54,10 @@ public class UserTypes {
 	public void setId(int id) {
 		this.id = id;
 	}
+	@Override
+	public String toString() {
+		return "UserTypes [id=" + id + ", code=" + code + ", description=" + description + "]";
+	}
     
-	
 
 }

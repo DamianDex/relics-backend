@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "users", schema = "users")
@@ -34,6 +36,7 @@ public class User implements UserDetails {
 	private boolean enabled;
 	private String uuid;
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -41,7 +44,8 @@ public class User implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
+	@JsonIgnore
 	public String getName() {
 		if (username != null) {
 			return username.split("@")[0];
@@ -49,7 +53,9 @@ public class User implements UserDetails {
 		return null;
 	}
 
+
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		GrantedAuthority r = new GrantedAuthority() {
@@ -65,17 +71,20 @@ public class User implements UserDetails {
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonExpired() {
 		return enabled;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return false;

@@ -47,6 +47,7 @@ public class Relic {
     public String datingOfObject;
 
     @OneToMany
+    @JsonView(View.BasicDescription.class)
     public Set<Review> reviews;
 
     @OneToMany

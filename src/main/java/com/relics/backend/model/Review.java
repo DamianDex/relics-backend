@@ -22,9 +22,13 @@ public class Review {
     public Relic relic;
 
     @ManyToOne
+    @JsonView(View.BasicDescription.class)
     public AppUser appUser;
 
+    @JsonView(View.BasicDescription.class)
     public Integer rating;
+
+    @JsonView(View.BasicDescription.class)
     public String comment;
 
     public Review() {

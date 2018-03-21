@@ -6,6 +6,7 @@ import com.relics.backend.model.Review;
 import com.relics.backend.repository.RelicRepository;
 import com.relics.backend.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(value = "http://localhost:3000")
 public class ReviewController implements BasicController {
 
     @Autowired
@@ -34,17 +36,11 @@ public class ReviewController implements BasicController {
 
     @GetMapping("/relics/{id}/review")
     @ResponseBody
+    @JsonView(View.BasicDescription.class)
     public List<Review> getAllReviewsByRelicId(@PathVariable(value = "id") Long id) {
         return reviewRepository.findAllReviewByRelicId(id);
     }
 
-    @GetMapping("/relics/{id}/review/{quantity}")
-    @ResponseBody
-    public List<Review> getAllReviewsByRelicId(@PathVariable(value = "id") Long id, @PathVariable(value = "quantity") Integer quantity) {
-        return reviewRepository.findAllReviewByRelicIdWithLimit(id, quantity);
-    }
-
-    @JsonView(View.BasicDescription.class)
     @GetMapping("/relics/review")
     @ResponseBody
     public List<Review> getAllReviews() {

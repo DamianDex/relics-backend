@@ -38,6 +38,12 @@ public class ReviewController implements BasicController {
         return reviewRepository.findAllReviewByRelicId(id);
     }
 
+    @GetMapping("/relics/{id}/review/{quantity}")
+    @ResponseBody
+    public List<Review> getAllReviewsByRelicId(@PathVariable(value = "id") Long id, @PathVariable(value = "quantity") Integer quantity) {
+        return reviewRepository.findAllReviewByRelicIdWithLimit(id, quantity);
+    }
+
     @JsonView(View.BasicDescription.class)
     @GetMapping("/relics/review")
     @ResponseBody

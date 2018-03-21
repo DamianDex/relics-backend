@@ -10,9 +10,9 @@ import com.relics.backend.model.User;
 @Repository
 public interface AppUserRepository extends JpaRepository<User, Long> {
 
-	@Query(value = "INSERT INTO users.users(\"username\", \"password\") "
-			+ "VALUES(:username, :password)", nativeQuery = true)
-	void addUser(@Param("username") String username, @Param("password") String password);
+	@Query(value = "INSERT INTO users.users(\"username\", \"password\", \"uuid\") "
+			+ "VALUES(:username, :password, :uuid)", nativeQuery = true)
+	void addUser(@Param("username") String username, @Param("password") String password, @Param("uuid") String uuid);
 
 	@Query(value = "SELECT * FROM users.users WHERE username = :username", 
 			nativeQuery = true)

@@ -1,10 +1,13 @@
 package com.relics.backend.security;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
 import com.relics.backend.model.User;
 import com.relics.backend.security.model.LoginResult;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 
 
 @Component
@@ -14,7 +17,7 @@ public class LoginUtils {
 		if (user == null) {
 			return LoginResult.NO_SUCH_USER;
 		} else {
-			if (!user.getPassword().equals(user.getPassword())) {
+			if (passwordEncoder().matches(password, user.getPassword())) {
 				return LoginResult.INVALID_PASSWORD;
 			} else {
 				return LoginResult.SUCCESS;
@@ -28,6 +31,10 @@ public class LoginUtils {
 			return (User) user;
 		}
 		return null;		
+	}
+	
+	public PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
 	}
 
 }

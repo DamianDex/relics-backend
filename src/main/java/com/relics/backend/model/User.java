@@ -36,7 +36,6 @@ public class User implements UserDetails {
 	private boolean enabled;
 	private String uuid;
 
-	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}

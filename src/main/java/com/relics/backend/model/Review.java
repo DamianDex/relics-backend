@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Review {
@@ -48,5 +46,16 @@ public class Review {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", relic=" + relic +
+                ", appUser=" + appUser +
+                ", rating=" + rating +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 }

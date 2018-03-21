@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.relics.backend.model.ErrorMessages;
+import com.relics.backend.model.Messages;
 import com.relics.backend.repository.AppUserRepository;
 import com.relics.backend.security.LoginUtils;
 import com.relics.backend.security.model.RegistrationBean;
@@ -24,17 +24,17 @@ public class AppUserController implements BasicController {
     private LoginUtils loginUtils;
 
     @PostMapping("/user/add")
-    public ErrorMessages createNewUser(@RequestBody RegistrationBean user) {
+    public Messages createNewUser(@RequestBody RegistrationBean user) {
     	boolean userExists = appUserRepository.userExists(user.getUsername());
     	if (!userExists) {
     		try {
             	appUserRepository.addUser(user.getUsername(), loginUtils.passwordEncoder().encode(user.getPassword()), UUID.randomUUID().toString());
     		} catch (Exception e) {
-    			return ErrorMessages.INNER_SERVER_ERROR;
+    			return Messages.INNER_SERVER_ERROR;
     		}
-        	return ErrorMessages.USER_CREATED;
+        	return Messages.USER_CREATED;
     	} else {
-			return ErrorMessages.USERNAME_CONFLICT;
+			return Messages.USERNAME_CONFLICT;
     	}
     }
     

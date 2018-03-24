@@ -32,6 +32,14 @@ public class Review {
     public Review() {
     }
 
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
     public Integer getRating() {
         return rating;
     }

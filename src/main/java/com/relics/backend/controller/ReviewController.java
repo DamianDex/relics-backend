@@ -5,6 +5,7 @@ import com.relics.backend.View;
 import com.relics.backend.model.Review;
 import com.relics.backend.repository.RelicRepository;
 import com.relics.backend.repository.ReviewRepository;
+import com.relics.backend.security.LoginUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +25,14 @@ import java.util.List;
 public class ReviewController implements BasicController {
 
     @Autowired
-    private RelicRepository relicRepository;
+    private ReviewRepository reviewRepository;
 
     @Autowired
-    private ReviewRepository reviewRepository;
+    private LoginUtils loginUtils;
 
     @PostMapping("/relics/review")
     public void createNewReview(@Valid @RequestBody Review review) {
+        review.setAppUser(loginUtils.getLoggedUser().getId());
         reviewRepository.save(review);
     }
 

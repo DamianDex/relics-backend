@@ -32,7 +32,7 @@ public class ReviewController implements BasicController {
 
     @PostMapping("/relics/review")
     public void createNewReview(@Valid @RequestBody Review review) {
-        review.setAppUser(loginUtils.getLoggedUser().getId());
+        //review.setAppUser(loginUtils.getLoggedUser().getId());
         reviewRepository.save(review);
     }
 

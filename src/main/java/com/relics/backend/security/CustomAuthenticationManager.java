@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import com.relics.backend.model.User;
+import com.relics.backend.model.ApplicationUser;
 import com.relics.backend.repository.AppUserRepository;
 import com.relics.backend.security.model.LoginResult;
 
@@ -27,9 +27,9 @@ public class CustomAuthenticationManager implements AuthenticationManager{
 		String password = (String) authentication.getCredentials();
 
 		LoginResult logUser;
-		User user = appUserRepository.getUser(username);
+		ApplicationUser applicationUser = appUserRepository.getUser(username);
 		try {
-			logUser = loginUtils.getLoginResult(user, password);
+			logUser = loginUtils.getLoginResult(applicationUser, password);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -49,7 +49,7 @@ public class CustomAuthenticationManager implements AuthenticationManager{
 			throw new BadCredentialsException(logUser.name());
 		}
 	
-		return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(applicationUser, password, applicationUser.getAuthorities());
 	}
 
 	

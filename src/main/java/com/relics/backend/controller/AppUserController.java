@@ -2,6 +2,7 @@ package com.relics.backend.controller;
 
 import java.util.UUID;
 
+import com.relics.backend.model.ApplicationUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,10 @@ public class AppUserController implements BasicController {
     	if (!userExists) {
     		try {
             	appUserRepository.addUser(user.getUsername(), loginUtils.passwordEncoder().encode(user.getPassword()), UUID.randomUUID().toString());
+//            	ApplicationUser userStub = new ApplicationUser();
+//            	userStub.setPassword("aaaa");
+//            	userStub.setUsername("aaaaa");
+//				appUserRepository.save(userStub);
     		} catch (Exception e) {
     			return Messages.INNER_SERVER_ERROR;
     		}

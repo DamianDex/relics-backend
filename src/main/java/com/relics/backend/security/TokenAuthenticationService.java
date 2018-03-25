@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.relics.backend.model.ApplicationUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +21,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.relics.backend.model.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -33,9 +33,9 @@ class TokenAuthenticationService {
 	static final String HEADER_STRING = "Authorization";
 	static final ObjectMapper mapper = new ObjectMapper();
 
-	static void addAuthentication(HttpServletResponse res, User user,
+	static void addAuthentication(HttpServletResponse res, ApplicationUser applicationUser,
 			Collection<? extends GrantedAuthority> roles) throws JsonProcessingException {
-		String userJson = mapper.writeValueAsString(user);
+		String userJson = mapper.writeValueAsString(applicationUser);
 		Claims claims = Jwts.claims().setSubject(userJson);
 		claims.put("scopes", roles);
 		
@@ -53,9 +53,9 @@ class TokenAuthenticationService {
 		if (token != null) {
 			Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
 			String userJson = claims.getSubject();
-			User user = null;
+			ApplicationUser applicationUser = null;
 			try {
-				user = mapper.readValue(userJson, User.class);
+				applicationUser = mapper.readValue(userJson, ApplicationUser.class);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -67,7 +67,7 @@ class TokenAuthenticationService {
 					.map(auth -> new SimpleGrantedAuthority(auth))
 					.collect(Collectors.toList());
 
-			return user != null ? new UsernamePasswordAuthenticationToken(user, null, grantedAuthorities) : null;
+			return applicationUser != null ? new UsernamePasswordAuthenticationToken(applicationUser, null, grantedAuthorities) : null;
 		}
 		return null;
 	}

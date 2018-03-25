@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
-import com.relics.backend.model.User;
+import com.relics.backend.model.ApplicationUser;
 import com.relics.backend.model.UserTypes;
 import com.relics.backend.repository.AppUserRepository;
 
@@ -58,9 +58,9 @@ public class FilterSecurityMetadataSource implements FilterInvocationSecurityMet
 		
 		List<ConfigAttribute> configAttributes = new ArrayList<>(0);
 		
-		User user = loginUtils.getLoggedUser();
+		ApplicationUser applicationUser = loginUtils.getLoggedUser();
 
-		if (user != null)
+		if (applicationUser != null)
 			loadRequestMap();
 		
 		if (requestMap == null)

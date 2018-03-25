@@ -10,7 +10,7 @@ public enum Messages {
 	INNER_SERVER_ERROR(Result.ERROR ,"Wystpił problem z serwerem. Spróbuj później."),
 	
 	/**
-	 * User connected
+	 * ApplicationUser connected
 	 */
 	USER_CREATED(Result.SUCCESS, "Pomyślnie utworzono użytkownika."),
 	USERNAME_CONFLICT(Result.ERROR, "Uzytkownik o podanym adresie email jest już zarejestrowany!");

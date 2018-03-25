@@ -1,5 +1,6 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Review {
@@ -21,7 +23,8 @@ public class Review {
 
     @ManyToOne
     @JsonView(View.BasicDescription.class)
-    public AppUser appUser;
+    @JsonInclude
+    public ApplicationUser appUser;
 
     @JsonView(View.BasicDescription.class)
     public Integer rating;
@@ -32,11 +35,11 @@ public class Review {
     public Review() {
     }
 
-    public AppUser getAppUser() {
+    public ApplicationUser getAppUser() {
         return appUser;
     }
 
-    public void setAppUser(AppUser appUser) {
+    public void setAppUser(ApplicationUser appUser) {
         this.appUser = appUser;
     }
 

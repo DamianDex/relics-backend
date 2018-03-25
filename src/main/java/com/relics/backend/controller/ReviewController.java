@@ -3,7 +3,6 @@ package com.relics.backend.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 import com.relics.backend.model.Review;
-import com.relics.backend.repository.RelicRepository;
 import com.relics.backend.repository.ReviewRepository;
 import com.relics.backend.security.LoginUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class ReviewController implements BasicController {
 
     @PostMapping("/relics/review")
     public void createNewReview(@Valid @RequestBody Review review) {
-        //review.setAppUser(loginUtils.getLoggedUser().getId());
+        System.out.println(loginUtils.getLoggedUser().toString());
         reviewRepository.save(review);
     }
 
@@ -47,6 +46,18 @@ public class ReviewController implements BasicController {
     @JsonView(View.BasicDescription.class)
     public List<Review> getAllReviewsByRelicId(@PathVariable(value = "id") Long id) {
         return reviewRepository.findAllReviewByRelicId(id);
+    }
+
+    @GetMapping("/relics/{id}/review/avg")
+    @ResponseBody
+    public Double getAvgRating(@PathVariable(value = "id") Long id) {
+        return reviewRepository.getAvgRating(id);
+    }
+
+    @GetMapping("relics/{id}/review/count")
+    @ResponseBody
+    public Integer getRatingCount(@PathVariable(value = "id") Long id) {
+        return reviewRepository.findAllReviewByRelicId(id).size();
     }
 
     @GetMapping("/relics/review")

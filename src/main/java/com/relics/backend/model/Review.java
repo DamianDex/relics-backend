@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
 @Entity
 public class Review {
@@ -31,6 +30,9 @@ public class Review {
 
     @JsonView(View.BasicDescription.class)
     public String comment;
+
+    @JsonView(View.BasicDescription.class)
+    private String creationDate;
 
     public Review() {
     }
@@ -59,6 +61,30 @@ public class Review {
         this.comment = comment;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Relic getRelic() {
+        return relic;
+    }
+
+    public void setRelic(Relic relic) {
+        this.relic = relic;
+    }
+
+    public String getDate() {
+        return creationDate;
+    }
+
+    public void setDate(String date) {
+        this.creationDate = date;
+    }
+
     @Override
     public String toString() {
         return "Review{" +
@@ -67,6 +93,7 @@ public class Review {
                 ", appUser=" + appUser +
                 ", rating=" + rating +
                 ", comment='" + comment + '\'' +
+                ", date=" + creationDate +
                 '}';
     }
 }

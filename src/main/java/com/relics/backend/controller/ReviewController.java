@@ -5,6 +5,7 @@ import com.relics.backend.View;
 import com.relics.backend.model.Review;
 import com.relics.backend.repository.ReviewRepository;
 import com.relics.backend.security.LoginUtils;
+import com.relics.backend.time.utils.DataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,8 @@ import java.util.List;
 @CrossOrigin(value = "http://localhost:3000")
 public class ReviewController implements BasicController {
 
+    private final DataConverter dataConverter = new DataConverter();
+
     @Autowired
     private ReviewRepository reviewRepository;
 
@@ -31,7 +34,8 @@ public class ReviewController implements BasicController {
 
     @PostMapping("/relics/review")
     public void createNewReview(@Valid @RequestBody Review review) {
-        System.out.println(loginUtils.getLoggedUser().toString());
+        String formattedDate = dataConverter.convertDateToString();
+        review.setDate(formattedDate);
         reviewRepository.save(review);
     }
 

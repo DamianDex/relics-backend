@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -62,6 +63,12 @@ public class ReviewController implements BasicController {
     @ResponseBody
     public Integer getRatingCount(@PathVariable(value = "id") Long id) {
         return reviewRepository.findAllReviewByRelicId(id).size();
+    }
+
+    @GetMapping("relics/review/ranking/{quantity}")
+    @ResponseBody
+    public List<BigInteger> getTopRankedRelicIDs(@PathVariable(value = "quantity") Integer quantity) {
+        return reviewRepository.getTopRankedRelicIDs(quantity);
     }
 
     @GetMapping("/relics/review")

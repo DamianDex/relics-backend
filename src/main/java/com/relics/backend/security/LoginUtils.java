@@ -17,9 +17,9 @@ public class LoginUtils {
 			return LoginResult.NO_SUCH_USER;
 		} else {
 			if (passwordEncoder().matches(password, applicationUser.getPassword())) {
-				return LoginResult.INVALID_PASSWORD;
-			} else {
 				return LoginResult.SUCCESS;
+			} else {
+				return LoginResult.INVALID_PASSWORD;
 			}
 		}
 	}

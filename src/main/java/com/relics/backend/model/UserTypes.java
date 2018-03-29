@@ -30,6 +30,9 @@ public class UserTypes {
     private String code;
     private String description;
 
+/*    @OneToMany( targetEntity=ApplicationUser.class )
+    private List<ApplicationUser> usersList;*/
+
     public UserTypes() {
     }
 
@@ -56,6 +59,14 @@ public class UserTypes {
     public void setId(int id) {
         this.id = id;
     }
+
+/*    public List<ApplicationUser> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<ApplicationUser> usersList) {
+        this.usersList = usersList;
+    }*/
 
     @Override
     public String toString() {

@@ -38,6 +38,7 @@ public class ReviewController implements BasicController {
     public void createNewReview(@Valid @RequestBody Review review) {
         String formattedDate = dataConverter.convertDateToString();
         review.setDate(formattedDate);
+        review.setAppUser(loginUtils.getLoggedUser());
         reviewRepository.save(review);
     }
 

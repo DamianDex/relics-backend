@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,6 +70,14 @@ public class ReviewController implements BasicController {
     @ResponseBody
     public List<BigInteger> getTopRankedRelicIDs(@PathVariable(value = "quantity") Integer quantity) {
         return reviewRepository.getTopRankedRelicIDs(quantity);
+    }
+
+    @GetMapping("relics/review/ranking/{quantity}/filter")
+    @ResponseBody
+    public List<BigInteger> getTopRankedRelicsIDsWithFilter(@PathVariable(value = "quantity") Integer quantity,
+                                                            @RequestParam(value = "category", defaultValue = "%") String category,
+                                                            @RequestParam(value = "voivodeship", defaultValue = "%") String voivodeship) {
+        return reviewRepository.getTopRankedRelicsIDsWithFilter(quantity, category, voivodeship);
     }
 
     @GetMapping("/relics/review")

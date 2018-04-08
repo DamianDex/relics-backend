@@ -24,14 +24,12 @@ public class UserTypes {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String code;
     private String description;
 
-/*    @OneToMany( targetEntity=ApplicationUser.class )
-    private List<ApplicationUser> usersList;*/
 
     public UserTypes() {
     }
@@ -52,21 +50,13 @@ public class UserTypes {
         this.description = description;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
-
-/*    public List<ApplicationUser> getUsersList() {
-        return usersList;
-    }
-
-    public void setUsersList(List<ApplicationUser> usersList) {
-        this.usersList = usersList;
-    }*/
 
     @Override
     public String toString() {

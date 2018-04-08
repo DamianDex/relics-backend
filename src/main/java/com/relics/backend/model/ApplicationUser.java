@@ -3,16 +3,14 @@ package com.relics.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
+import com.relics.backend.security.model.RegistrationBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 public class ApplicationUser implements UserDetails {
@@ -27,10 +25,19 @@ public class ApplicationUser implements UserDetails {
 
     @ManyToOne
     private UserTypes type;
+
     private boolean enabled;
     private String uuid;
 
     public ApplicationUser() {
+    }
+
+    public ApplicationUser(RegistrationBean rUser, UserTypes type){
+        this.username = rUser.getUsername();
+        this.password = rUser.getPassword();
+        this.enabled = false;
+        this.uuid =  UUID.randomUUID().toString();
+        this.type = type;
     }
 
     public String getPassword() {

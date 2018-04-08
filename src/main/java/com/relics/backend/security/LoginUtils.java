@@ -1,6 +1,7 @@
 package com.relics.backend.security;
 
 import com.relics.backend.model.ApplicationUser;
+import com.relics.backend.security.model.RegistrationBean;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,16 @@ public class LoginUtils {
 			return (ApplicationUser) user;
 		}
 		return null;		
+	}
+
+	public ApplicationUser encodeUserPassword(ApplicationUser user){
+		user.setPassword(passwordEncoder().encode(user.getPassword()));
+		return user;
+	}
+
+	public RegistrationBean encodeUserPassword(RegistrationBean user){
+		user.setPassword(passwordEncoder().encode(user.getPassword()));
+		return user;
 	}
 	
 	public PasswordEncoder passwordEncoder() {

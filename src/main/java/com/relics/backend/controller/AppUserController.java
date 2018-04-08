@@ -1,8 +1,8 @@
 package com.relics.backend.controller;
 
-import java.util.UUID;
-
 import com.relics.backend.model.ApplicationUser;
+import com.relics.backend.model.UserTypes;
+import com.relics.backend.repository.UserTypesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.relics.backend.model.Messages;
 import com.relics.backend.repository.AppUserRepository;
 import com.relics.backend.security.LoginUtils;
+
 import com.relics.backend.security.model.RegistrationBean;
 
 @RestController
@@ -20,6 +21,9 @@ public class AppUserController implements BasicController {
 
     @Autowired
     private AppUserRepository appUserRepository;
+
+    @Autowired
+    private UserTypesRepository userTypesRepository;
     
     @Autowired
     private LoginUtils loginUtils;
@@ -29,12 +33,12 @@ public class AppUserController implements BasicController {
     	boolean userExists = appUserRepository.userExists(user.getUsername());
     	if (!userExists) {
     		try {
-            	appUserRepository.addUser(user.getUsername(), loginUtils.passwordEncoder().encode(user.getPassword()), UUID.randomUUID().toString());
-//            	ApplicationUser userStub = new ApplicationUser();
-//            	userStub.setPassword("aaaa");
-//            	userStub.setUsername("aaaaa");
-//				appUserRepository.save(userStub);
+                user = loginUtils.encodeUserPassword(user);
+            	UserTypes uType = userTypesRepository.getUserTypeByCode(UserTypes.ManagedTypes.USER.name());
+                ApplicationUser appUser = new ApplicationUser(user, uType);
+				appUserRepository.save(appUser);
     		} catch (Exception e) {
+    		    System.out.println(e);
     			return Messages.INNER_SERVER_ERROR;
     		}
         	return Messages.USER_CREATED;

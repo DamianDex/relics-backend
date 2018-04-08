@@ -13,8 +13,13 @@ public enum Messages {
 	 * ApplicationUser connected
 	 */
 	USER_CREATED(Result.SUCCESS, "Pomyślnie utworzono użytkownika."),
-	USERNAME_CONFLICT(Result.ERROR, "Uzytkownik o podanym adresie email jest już zarejestrowany!");
-	
+	USERNAME_CONFLICT(Result.ERROR, "Uzytkownik o podanym adresie email jest już zarejestrowany!"),
+	BAD_USERNAME_FORMAT(Result.ERROR, "Podany login nie jest właściwym adresem email!"),
+	INVALID_PASSWORD(Result.ERROR, "Podano niewłaściwe hasło!"),
+	NO_SUCH_USER(Result.ERROR, "Podany użytkownik nie istnieje!"),
+	USER_NOT_VERIFIED(Result.ERROR, "Konto dla tego użytkownika nie zostało aktywowane.");
+
+
 	private Result result;
 	private String description;
 	

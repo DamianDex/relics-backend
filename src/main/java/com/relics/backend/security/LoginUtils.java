@@ -19,7 +19,9 @@ public class LoginUtils {
 		} else {
 			if (passwordEncoder().matches(password, applicationUser.getPassword())) {
 				return LoginResult.SUCCESS;
-			} else {
+			} /* else if (!applicationUser.isEnabled()){
+				return LoginResult.USER_NOT_VERYFIED;
+			} */else {
 				return LoginResult.INVALID_PASSWORD;
 			}
 		}

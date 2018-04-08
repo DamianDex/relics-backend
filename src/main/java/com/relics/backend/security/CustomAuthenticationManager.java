@@ -1,11 +1,13 @@
 package com.relics.backend.security;
 
+import com.relics.backend.model.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.relics.backend.model.ApplicationUser;
@@ -35,14 +37,11 @@ public class CustomAuthenticationManager implements AuthenticationManager{
 		}
 		switch (logUser) {
 		case INVALID_PASSWORD:
-			throw new BadCredentialsException(logUser.name());
-		case NO_SUCH_USER:{
-			System.out.println("NO_SUCH_USER: " + username);
-			throw new BadCredentialsException(logUser.name());}
-		case USER_BLOCKED:
-			throw new BadCredentialsException(logUser.name());
-		case USER_NOT_VERYFIED:
-			throw new BadCredentialsException(logUser.name());
+			throw new BadCredentialsException(Messages.INVALID_PASSWORD.getDescription());
+		case NO_SUCH_USER:
+			throw new UsernameNotFoundException(Messages.NO_SUCH_USER.getDescription());
+		case USER_NOT_VERIFIED:
+			throw new BadCredentialsException(Messages.USER_NOT_VERIFIED.getDescription());
 		case SUCCESS:
 			break;
 		default:

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 public class Review {
 
     @Id
+    @JsonView(View.BasicDescription.class)
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 

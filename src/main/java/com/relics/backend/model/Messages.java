@@ -17,8 +17,8 @@ public enum Messages {
 	BAD_USERNAME_FORMAT(Result.ERROR, "Podany login nie jest właściwym adresem email!"),
 	INVALID_PASSWORD(Result.ERROR, "Podano niewłaściwe hasło!"),
 	NO_SUCH_USER(Result.ERROR, "Podany użytkownik nie istnieje!"),
-	USER_NOT_VERIFIED(Result.ERROR, "Konto dla tego użytkownika nie zostało aktywowane.");
-
+	USER_NOT_VERIFIED(Result.ERROR, "Konto dla tego użytkownika nie zostało aktywowane."),
+	LOGGED_OUT(Result.SUCCESS, "Zostałeś pomyślnie wylogowany.");
 
 	private Result result;
 	private String description;

@@ -4,16 +4,17 @@ import com.relics.backend.model.ApplicationUser;
 import com.relics.backend.model.UserTypes;
 import com.relics.backend.repository.UserTypesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import com.relics.backend.model.Messages;
 import com.relics.backend.repository.AppUserRepository;
 import com.relics.backend.security.LoginUtils;
 
 import com.relics.backend.security.model.RegistrationBean;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api")
@@ -53,11 +54,14 @@ public class AppUserController implements BasicController {
     	return "I'm logged!";
     }
 
-
-//    @GetMapping("/user")
-//    @ResponseBody
-//    public List<AppUser> getAllUsers() {
-//        return appUserRepository.findAll();
-//    }
+    @GetMapping("/logout")
+    public Messages logout(HttpServletRequest request) {
+		SecurityContextHolder.clearContext();
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		return Messages.LOGGED_OUT;
+    }
 
 }

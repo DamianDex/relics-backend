@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Review {
@@ -34,6 +36,9 @@ public class Review {
 
     @JsonView(View.BasicDescription.class)
     private String creationDate;
+
+    @OneToMany
+    private List<Vote> votes;
 
     public Review() {
     }
@@ -86,6 +91,22 @@ public class Review {
         this.creationDate = date;
     }
 
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
+
     @Override
     public String toString() {
         return "Review{" +
@@ -94,7 +115,8 @@ public class Review {
                 ", appUser=" + appUser +
                 ", rating=" + rating +
                 ", comment='" + comment + '\'' +
-                ", date=" + creationDate +
+                ", creationDate='" + creationDate + '\'' +
+                ", votes=" + votes +
                 '}';
     }
 }

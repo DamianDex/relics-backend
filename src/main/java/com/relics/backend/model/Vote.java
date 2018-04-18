@@ -1,5 +1,8 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.relics.backend.View;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,13 +16,12 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
+    @JsonView(View.BasicDescription.class)
     public Boolean isPositive;
 
     @ManyToOne
+    @JsonView(View.BasicDescription.class)
     public ApplicationUser applicationUser;
-
-    @ManyToOne
-    public Review review;
 
     public Vote() {
     }
@@ -48,21 +50,12 @@ public class Vote {
         this.applicationUser = applicationUser;
     }
 
-    public Review getReview() {
-        return review;
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
-    }
-
     @Override
     public String toString() {
         return "Vote{" +
                 "id=" + id +
                 ", isPositive=" + isPositive +
                 ", applicationUser=" + applicationUser +
-                ", review=" + review +
                 '}';
     }
 }

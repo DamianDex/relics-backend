@@ -38,6 +38,8 @@ public class Review {
     private String creationDate;
 
     @OneToMany
+    @JsonInclude
+    @JsonView(View.BasicDescription.class)
     private List<Vote> votes;
 
     public Review() {
@@ -118,5 +120,9 @@ public class Review {
                 ", creationDate='" + creationDate + '\'' +
                 ", votes=" + votes +
                 '}';
+    }
+
+    public void addVote(Vote vote) {
+        votes.add(vote);
     }
 }

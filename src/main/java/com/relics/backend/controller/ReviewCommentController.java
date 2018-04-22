@@ -1,8 +1,11 @@
 package com.relics.backend.controller;
 
+import com.relics.backend.model.Review;
 import com.relics.backend.model.ReviewComment;
 import com.relics.backend.repository.ReviewCommentRepository;
 import com.relics.backend.repository.ReviewRepository;
+import com.relics.backend.security.LoginUtils;
+import com.relics.backend.time.utils.DataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,15 +21,25 @@ import javax.validation.Valid;
 @CrossOrigin(value = "http://localhost:3000")
 public class ReviewCommentController {
 
+    private final DataConverter dataConverter = new DataConverter();
+
     @Autowired
     ReviewCommentRepository reviewCommentRepository;
 
     @Autowired
     ReviewRepository reviewRepository;
 
+    @Autowired
+    LoginUtils loginUtils;
+
     @PostMapping("/relics/review/{id}/comment")
     public void createNewReviewComment(@PathVariable(value = "id") Long id, @Valid @RequestBody ReviewComment reviewComment) {
-        reviewComment.setReview(reviewRepository.findOne(id));
+        String formattedDate = dataConverter.convertDateToString();
+        reviewComment.setCreationDate(formattedDate);
+
+        reviewComment.setAppUser(loginUtils.getLoggedUser());
+        Review review = reviewRepository.findOne(id);
+        review.addComment(reviewComment);
         reviewCommentRepository.save(reviewComment);
     }
 }

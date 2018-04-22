@@ -42,6 +42,11 @@ public class Review {
     @JsonView(View.BasicDescription.class)
     private List<Vote> votes;
 
+    @OneToMany
+    @JsonInclude
+    @JsonView(View.BasicDescription.class)
+    private List<ReviewComment> comments;
+
     public Review() {
     }
 
@@ -109,6 +114,14 @@ public class Review {
         this.votes = votes;
     }
 
+    public List<ReviewComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<ReviewComment> comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         return "Review{" +
@@ -119,10 +132,15 @@ public class Review {
                 ", comment='" + comment + '\'' +
                 ", creationDate='" + creationDate + '\'' +
                 ", votes=" + votes +
+                ", comments=" + comments +
                 '}';
     }
 
     public void addVote(Vote vote) {
         votes.add(vote);
+    }
+
+    public void addComment(ReviewComment reviewComment) {
+        comments.add(reviewComment);
     }
 }

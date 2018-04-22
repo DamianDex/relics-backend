@@ -18,9 +18,6 @@ public class ReviewComment {
     public Long id;
 
     @ManyToOne
-    public Review review;
-
-    @ManyToOne
     @JsonView(View.BasicDescription.class)
     @JsonInclude
     public ApplicationUser appUser;
@@ -40,14 +37,6 @@ public class ReviewComment {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Review getReview() {
-        return review;
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
     }
 
     public ApplicationUser getAppUser() {
@@ -78,7 +67,6 @@ public class ReviewComment {
     public String toString() {
         return "ReviewComment{" +
                 "id=" + id +
-                ", review=" + review +
                 ", appUser=" + appUser +
                 ", comment='" + comment + '\'' +
                 ", creationDate='" + creationDate + '\'' +

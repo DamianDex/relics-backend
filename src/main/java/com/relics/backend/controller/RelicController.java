@@ -3,8 +3,8 @@ package com.relics.backend.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 import com.relics.backend.model.Relic;
+import com.relics.backend.recommender.DistanceRecommender;
 import com.relics.backend.repository.RelicRepository;
-import com.relics.backend.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +32,7 @@ public class RelicController implements BasicController {
     private RelicRepository relicRepository;
 
     @Autowired
-    private ReviewRepository reviewRepository;
+    private DistanceRecommender distanceRecommender;
 
     @PostMapping("/relics")
     public void createNewRelic(@Valid @RequestBody Relic relic) {
@@ -48,7 +49,7 @@ public class RelicController implements BasicController {
         relic = updateRelic(relic, newRelic);
         relicRepository.save(relic);
         return ResponseEntity.ok(relic);
-        }
+    }
 
     @GetMapping("/relics")
     @ResponseBody
@@ -60,6 +61,16 @@ public class RelicController implements BasicController {
     @ResponseBody
     public List<BigInteger> getRandomRelicIDs(@PathVariable(value = "quantity") Integer quantity) {
         return relicRepository.getRandomRelicIDs(quantity);
+    }
+
+    @GetMapping("/relics/random/distance/{quantity}")
+    @ResponseBody
+    public List<BigInteger> getRandomRelicsIDsByDistance(@PathVariable(value = "quantity") Integer quantity,
+                                                         @RequestParam(value = "latitude") Double latitude,
+                                                         @RequestParam(value = "longitude") Double longitude,
+                                                         @RequestParam(value = "maximum") Integer maxDistance) {
+        System.out.println("Jesteem tutaj kurwa");
+        return distanceRecommender.getRandomRelicsIDsByDistance(quantity, latitude, longitude, maxDistance);
     }
 
     @JsonView(View.BasicDescription.class)

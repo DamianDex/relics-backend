@@ -1,5 +1,6 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 import org.hibernate.annotations.Cascade;
@@ -25,7 +26,7 @@ public class Relic {
     @JsonView(View.BasicDescription.class)
     public String description;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @Cascade(CascadeType.PERSIST)
     public GeographicLocation geographicLocation;
 

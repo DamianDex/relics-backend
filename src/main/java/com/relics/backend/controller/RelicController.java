@@ -69,7 +69,6 @@ public class RelicController implements BasicController {
                                                          @RequestParam(value = "latitude") Double latitude,
                                                          @RequestParam(value = "longitude") Double longitude,
                                                          @RequestParam(value = "maximum") Integer maxDistance) {
-        System.out.println("Jesteem tutaj kurwa");
         return distanceRecommender.getRandomRelicsIDsByDistance(quantity, latitude, longitude, maxDistance);
     }
 
@@ -78,7 +77,6 @@ public class RelicController implements BasicController {
     @ResponseBody
     public ResponseEntity<Relic> getRelicById(@PathVariable(value = "id") Long id) {
         Relic relic = relicRepository.findOne(id);
-        System.out.println(relic.toString());
         if (relic == null)
             return getNotFoundResponseEntity();
         return ResponseEntity.ok(relic);

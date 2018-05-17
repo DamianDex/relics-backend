@@ -8,7 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class DistanceRecommender {
@@ -16,31 +20,37 @@ public class DistanceRecommender {
     @Autowired
     RelicRepository relicRepository;
 
-    private List<BigInteger> currentRandomRelicIDs;
-    private List<BigInteger> results;
-
     public List<BigInteger> getRandomRelicsIDsByDistance(Integer quantity, Double latitude, Double longitude, Integer maxDistance) {
-        results = new ArrayList<>();
-        while (results.size() < quantity) {
-            setRandomRelicIDs(100);
-            for (BigInteger relicId : currentRandomRelicIDs) {
-                Relic relic = relicRepository.getOne(Long.valueOf(String.valueOf(relicId)));
-                GeographicLocation geographicLocation = relic.getGeographicLocation();
-                Double relicLongitude = geographicLocation.getLongitude();
-                Double relicLatitude = geographicLocation.getLatitude();
 
-                if (maxDistance > calculateDistanceInKm(latitude, longitude, relicLatitude, relicLongitude)) {
-                    results.add(relicId);
-                    if (results.size() >= quantity)
-                        break;
+        List<BigInteger> results = new ArrayList<>(3);
+
+        List<Relic> relics = relicRepository.findAll();
+        Map<Long, Double> distanceMap = prepareMapIdDistance(relics.subList(0, 1000), latitude, longitude);
+
+        for (int i = 0; i < 3; i++) {
+            Map.Entry<Long, Double> min = Collections.min(distanceMap.entrySet(), new Comparator<Map.Entry<Long, Double>>() {
+                public int compare(Map.Entry<Long, Double> entry1, Map.Entry<Long, Double> entry2) {
+                    return entry1.getValue().compareTo(entry2.getValue());
                 }
-            }
+            });
+
+            results.add(BigInteger.valueOf(min.getKey()));
+            distanceMap.remove(min.getKey());
         }
+
         return results;
     }
 
-    private void setRandomRelicIDs(Integer quantity) {
-        currentRandomRelicIDs = relicRepository.getRandomRelicIDs(quantity);
+    Map<Long, Double> prepareMapIdDistance(List<Relic> relics, Double latitude, Double longitude) {
+
+        Map<Long, Double> results = new HashMap<>();
+
+        for (Relic relic : relics) {
+            GeographicLocation geographicLocation = relic.getGeographicLocation();
+            results.put(relic.getId(), calculateDistanceInKm(geographicLocation.getLatitude(), geographicLocation.getLatitude(), latitude, longitude));
+        }
+
+        return results;
     }
 
     Double calculateDistanceInKm(Double lat1, Double lon1, Double lat2, Double lon2) {

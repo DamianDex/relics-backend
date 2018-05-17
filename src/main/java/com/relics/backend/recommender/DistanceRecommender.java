@@ -1,10 +1,15 @@
 package com.relics.backend.recommender;
 
+import com.google.common.collect.Lists;
 import com.relics.backend.model.GeographicLocation;
 import com.relics.backend.model.Relic;
 import com.relics.backend.repository.RelicRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -24,9 +29,18 @@ public class DistanceRecommender {
 
         List<BigInteger> results = new ArrayList<>(3);
 
+        long start = System.currentTimeMillis();
         List<BigInteger> relics = relicRepository.getAllIDs();
+        Collections.shuffle(relics);
+        long end = System.currentTimeMillis();
+        System.out.println("Get ids: " + (end - start));
 
-        Map<Long, Double> distanceMap = prepareMapIdDistance(relics.subList(1, 500), latitude, longitude);
+        long start2 = System.currentTimeMillis();
+        Map<Long, Double> distanceMap = prepareMapIdDistance(relics.subList(1, 2000), latitude, longitude);
+        long end2 = System.currentTimeMillis();
+        System.out.println("Get ids: " + (end2 - start2));
+
+        System.out.println(distanceMap);
 
         for (int i = 0; i < 3; i++) {
             Map.Entry<Long, Double> min = Collections.min(distanceMap.entrySet(), new Comparator<Map.Entry<Long, Double>>() {
@@ -44,12 +58,25 @@ public class DistanceRecommender {
 
     Map<Long, Double> prepareMapIdDistance(List<BigInteger> relics, Double latitude, Double longitude) {
 
+        List<List<BigInteger>> chunks = Lists.partition(relics, 500);
         Map<Long, Double> results = new HashMap<>();
 
-        for (BigInteger relicId : relics) {
-            Relic relic = relicRepository.getOne(Long.valueOf(String.valueOf(relicId)));
-            GeographicLocation geographicLocation = relic.getGeographicLocation();
-            results.put(relic.getId(), calculateDistanceInKm(geographicLocation.getLatitude(), geographicLocation.getLatitude(), latitude, longitude));
+        for (List<BigInteger> chunk : chunks) {
+            Thread t = new Thread(() -> {
+                for (BigInteger relicId : chunk) {
+                    Relic relic = relicRepository.getOne(Long.valueOf(String.valueOf(relicId)));
+                    GeographicLocation geographicLocation = relic.getGeographicLocation();
+                    results.put(relic.getId(), calculateDistanceInKm(geographicLocation.getLatitude(), geographicLocation.getLongitude(), latitude, longitude));
+                }
+            });
+
+            t.start();
+
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         return results;

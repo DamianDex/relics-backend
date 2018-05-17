@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -26,7 +27,7 @@ public class Relic {
     @JsonView(View.BasicDescription.class)
     public String description;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @Cascade(CascadeType.PERSIST)
     public GeographicLocation geographicLocation;
 

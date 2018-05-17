@@ -21,4 +21,7 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
             "ORDER BY random()" +
             "LIMIT :quantity", nativeQuery = true)
     List<BigInteger> getRandomRelicIDs(@Param("quantity") Integer quantity);
+
+    @Query(value = "SELECT id FROM public.relic\n", nativeQuery = true)
+    List<BigInteger> getAllIDs();
 }

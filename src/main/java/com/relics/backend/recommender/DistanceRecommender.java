@@ -24,8 +24,9 @@ public class DistanceRecommender {
 
         List<BigInteger> results = new ArrayList<>(3);
 
-        List<Relic> relics = relicRepository.findAll();
-        Map<Long, Double> distanceMap = prepareMapIdDistance(relics.subList(0, 1000), latitude, longitude);
+        List<BigInteger> relics = relicRepository.getAllIDs();
+
+        Map<Long, Double> distanceMap = prepareMapIdDistance(relics.subList(1, 500), latitude, longitude);
 
         for (int i = 0; i < 3; i++) {
             Map.Entry<Long, Double> min = Collections.min(distanceMap.entrySet(), new Comparator<Map.Entry<Long, Double>>() {
@@ -41,11 +42,12 @@ public class DistanceRecommender {
         return results;
     }
 
-    Map<Long, Double> prepareMapIdDistance(List<Relic> relics, Double latitude, Double longitude) {
+    Map<Long, Double> prepareMapIdDistance(List<BigInteger> relics, Double latitude, Double longitude) {
 
         Map<Long, Double> results = new HashMap<>();
 
-        for (Relic relic : relics) {
+        for (BigInteger relicId : relics) {
+            Relic relic = relicRepository.getOne(Long.valueOf(String.valueOf(relicId)));
             GeographicLocation geographicLocation = relic.getGeographicLocation();
             results.put(relic.getId(), calculateDistanceInKm(geographicLocation.getLatitude(), geographicLocation.getLatitude(), latitude, longitude));
         }

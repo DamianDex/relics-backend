@@ -26,7 +26,7 @@ public class Relic {
     @JsonView(View.BasicDescription.class)
     public String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @Cascade(CascadeType.PERSIST)
     public GeographicLocation geographicLocation;
 

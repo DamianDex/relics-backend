@@ -81,6 +81,13 @@ public class ReviewController implements BasicController {
         return reviewRepository.getTopRankedRelicsIDsWithFilter(quantity, category, voivodeship);
     }
 
+    @GetMapping("/relics/{id}/user")
+    @ResponseBody
+    public Double getCurrentUserRating(@PathVariable(value = "id") Long id) {
+        Long userId = loginUtils.getLoggedUser().getId();
+        return reviewRepository.getCurrentUserRating(id, userId);
+    }
+
     @GetMapping("/relics/review")
     @ResponseBody
     public List<Review> getAllReviews() {

@@ -40,4 +40,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<BigInteger> getTopRankedRelicsIDsWithFilter(@Param("quantity") Integer quantity,
                                                      @Param("category") String category,
                                                      @Param("voivodeship") String voivodeship);
+
+    @Query(value = "SELECT rating\n" +
+            "FROM review\n" +
+            "WHERE relic_id = :id\n" +
+            "AND app_user_id = :userId", nativeQuery = true)
+    Double getCurrentUserRating(@Param("id") Long id,
+                                @Param("userId") Long userId);
 }

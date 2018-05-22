@@ -33,14 +33,10 @@ public class DistanceRecommender {
         List<BigInteger> relics = relicRepository.getAllIDs();
         Collections.shuffle(relics);
         long end = System.currentTimeMillis();
-        System.out.println("Get ids: " + (end - start));
 
         long start2 = System.currentTimeMillis();
         Map<Long, Double> distanceMap = prepareMapIdDistance(relics.subList(1, 2000), latitude, longitude);
         long end2 = System.currentTimeMillis();
-        System.out.println("Get ids: " + (end2 - start2));
-
-        System.out.println(distanceMap);
 
         for (int i = 0; i < 3; i++) {
             Map.Entry<Long, Double> min = Collections.min(distanceMap.entrySet(), new Comparator<Map.Entry<Long, Double>>() {

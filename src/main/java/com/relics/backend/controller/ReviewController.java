@@ -42,9 +42,12 @@ public class ReviewController implements BasicController {
         reviewRepository.save(review);
     }
 
-    @GetMapping(value = "relics/{id}/review/{userId}")
+    @GetMapping(value = "relics/{id}/isReviewed")
     @ResponseBody
-    public Boolean checkIfUserReviewRelic(@PathVariable(value = "id") Long id, @PathVariable(value = "userId") Long userid) {
+    public Boolean checkIfUserReviewRelic(@PathVariable(value = "id") Long id) {
+        Long userId = loginUtils.getLoggedUser().getId();
+        if (reviewRepository.getCurrentUserRating(id, userId) != null)
+            return true;
         return false;
     }
 

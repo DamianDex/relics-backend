@@ -3,7 +3,8 @@ package com.relics.backend.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 import com.relics.backend.model.Relic;
-import com.relics.backend.recommender.DistanceRecommender;
+import com.relics.backend.recommender.distance.DistanceRecommender;
+import com.relics.backend.recommender.user.UserReviewRecommender;
 import com.relics.backend.repository.RelicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,9 @@ public class RelicController implements BasicController {
     @Autowired
     private DistanceRecommender distanceRecommender;
 
+    @Autowired
+    private UserReviewRecommender recommendRelicsByUserReviews;
+
     @PostMapping("/relics")
     public void createNewRelic(@Valid @RequestBody Relic relic) {
         relicRepository.save(relic);
@@ -63,13 +67,17 @@ public class RelicController implements BasicController {
         return relicRepository.getRandomRelicIDs(quantity);
     }
 
-    @GetMapping("/relics/random/distance/{quantity}")
+    @GetMapping("/relics/recommend/distance")
     @ResponseBody
-    public List<BigInteger> getRandomRelicsIDsByDistance(@PathVariable(value = "quantity") Integer quantity,
-                                                         @RequestParam(value = "latitude") Double latitude,
-                                                         @RequestParam(value = "longitude") Double longitude,
-                                                         @RequestParam(value = "maximum") Integer maxDistance) {
-        return distanceRecommender.getRandomRelicsIDsByDistance(quantity, latitude, longitude, maxDistance);
+    public List<BigInteger> recommendRelicsByDistance(@RequestParam(value = "latitude") Double latitude,
+                                                      @RequestParam(value = "longitude") Double longitude) {
+        return distanceRecommender.recommendRelicsByDistance(latitude, longitude);
+    }
+
+    @GetMapping("/relics/recommend/reviews")
+    @ResponseBody
+    public List<BigInteger> recommendRelicsByUserReviews() {
+        return recommendRelicsByUserReviews.recommendRelicsByUserReviews();
     }
 
     @JsonView(View.BasicDescription.class)

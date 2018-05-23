@@ -1,4 +1,4 @@
-package com.relics.backend.recommender;
+package com.relics.backend.recommender.user;
 
 public class User {
     public Long userId;

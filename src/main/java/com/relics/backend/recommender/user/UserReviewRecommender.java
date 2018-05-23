@@ -1,7 +1,8 @@
-package com.relics.backend.recommender;
+package com.relics.backend.recommender.user;
 
 import com.relics.backend.model.Review;
 import com.relics.backend.repository.ReviewRepository;
+import com.relics.backend.security.LoginUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
@@ -14,21 +15,34 @@ import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.assertj.core.util.Preconditions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class RecommenderMy {
+@Component
+public class UserReviewRecommender {
 
-    DataModel dataModel;
+    public static final String USER_DATA_MODEL_CACHE_FILE = "./src/main/resources/cache/user-review-cache.txt";
 
-    public void prepareDataModelFromDB(ReviewRepository reviewRepository) throws TasteException {
+    private DataModel dataModel;
+
+    @Autowired
+    ReviewRepository reviewRepository;
+
+    @Autowired
+    LoginUtils loginUtils;
+
+    private void prepareDataModelFromDB() throws TasteException {
         try {
-
-            FileWriter fileWriter = new FileWriter("data.txt");
+            FileWriter fileWriter = new FileWriter(USER_DATA_MODEL_CACHE_FILE);
             PrintWriter printWriter = new PrintWriter(fileWriter);
 
             List<Review> reviews = reviewRepository.findAll();
@@ -51,7 +65,19 @@ public class RecommenderMy {
                 printWriter.write(entryToDataModel);
             }
             printWriter.close();
-            dataModel = new FileDataModel(new File("data.txt"));
+
+            dataModel = new FileDataModel(new File(USER_DATA_MODEL_CACHE_FILE));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<BigInteger> recommendRelicsByUserReviews() {
+        List<BigInteger> results = new ArrayList<>(3);
+
+        try {
+            prepareDataModelFromDB();
 
             UserSimilarity userSimilarity = new PearsonCorrelationSimilarity(dataModel);
             UserNeighborhood neighborhood =
@@ -60,14 +86,20 @@ public class RecommenderMy {
                     new GenericUserBasedRecommender(dataModel, neighborhood, userSimilarity);
             Recommender cachingRecommender = new CachingRecommender(recommender);
             List<RecommendedItem> recommendations =
-                    cachingRecommender.recommend(2, 10);
+                    cachingRecommender.recommend(loginUtils.getLoggedUser().getId(), 3);
 
-            System.out.println(recommendations);
+            if (recommendations.isEmpty()) {
+                return Arrays.asList(new BigInteger("2175249"), new BigInteger("1655035"), new BigInteger("1655035"));
+            }
 
+            for (RecommendedItem item : recommendations.subList(0, 3)) {
+                results.add(BigInteger.valueOf(item.getItemID()));
+            }
 
-
-        } catch (IOException e) {
+        } catch (TasteException e) {
             e.printStackTrace();
         }
+
+        return results;
     }
 }

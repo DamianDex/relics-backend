@@ -1,4 +1,4 @@
-package com.relics.backend.recommender;
+package com.relics.backend.recommender.distance;
 
 import com.google.common.collect.Lists;
 import com.relics.backend.model.GeographicLocation;
@@ -25,18 +25,14 @@ public class DistanceRecommender {
     @Autowired
     RelicRepository relicRepository;
 
-    public List<BigInteger> getRandomRelicsIDsByDistance(Integer quantity, Double latitude, Double longitude, Integer maxDistance) {
+    public List<BigInteger> recommendRelicsByDistance(Double latitude, Double longitude) {
 
         List<BigInteger> results = new ArrayList<>(3);
 
-        long start = System.currentTimeMillis();
         List<BigInteger> relics = relicRepository.getAllIDs();
         Collections.shuffle(relics);
-        long end = System.currentTimeMillis();
 
-        long start2 = System.currentTimeMillis();
         Map<Long, Double> distanceMap = prepareMapIdDistance(relics.subList(1, 2000), latitude, longitude);
-        long end2 = System.currentTimeMillis();
 
         for (int i = 0; i < 3; i++) {
             Map.Entry<Long, Double> min = Collections.min(distanceMap.entrySet(), new Comparator<Map.Entry<Long, Double>>() {

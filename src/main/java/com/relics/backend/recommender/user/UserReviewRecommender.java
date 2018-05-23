@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -89,7 +90,7 @@ public class UserReviewRecommender {
                     cachingRecommender.recommend(loginUtils.getLoggedUser().getId(), 3);
 
             if (recommendations.isEmpty()) {
-                return Arrays.asList(new BigInteger("2175249"), new BigInteger("1655035"), new BigInteger("1655035"));
+                return Collections.emptyList();
             }
 
             for (RecommendedItem item : recommendations.subList(0, 3)) {

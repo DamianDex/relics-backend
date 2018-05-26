@@ -106,6 +106,16 @@ public class RelicController implements BasicController {
         return ResponseEntity.ok(relic);
     }
 
+    @GetMapping("relics/filter")
+    @ResponseBody
+    public List<BigInteger> getRelicItemsWithFilter(
+            @RequestParam(value = "name", defaultValue = "%") String name,
+            @RequestParam(value = "register", defaultValue = "%") String register,
+            @RequestParam(value = "voivodeship", defaultValue = "%") String voivodeship,
+            @RequestParam(value = "category", defaultValue = "%") String category) {
+        return relicRepository.getRelicItemsWithFilter(name, register, voivodeship, category);
+    }
+
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {
         oldRelic.setIdentification(newRelic.getIdentification());
         return oldRelic;

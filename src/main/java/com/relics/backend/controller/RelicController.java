@@ -112,8 +112,9 @@ public class RelicController implements BasicController {
             @RequestParam(value = "name", defaultValue = "%") String name,
             @RequestParam(value = "register", defaultValue = "%") String register,
             @RequestParam(value = "voivodeship", defaultValue = "%") String voivodeship,
-            @RequestParam(value = "category", defaultValue = "%") String category) {
-        return relicRepository.getRelicItemsWithFilter(name, register, voivodeship, category);
+            @RequestParam(value = "category", defaultValue = "%") String category,
+            @RequestParam(value = "place", defaultValue = "%") String place) {
+        return relicRepository.getRelicItemsWithFilter(name, register, voivodeship, category, place);
     }
 
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {

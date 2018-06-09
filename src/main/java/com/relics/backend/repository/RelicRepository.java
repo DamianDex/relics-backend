@@ -29,11 +29,13 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
             "FROM relic\n" +
             "  JOIN geographic_location ON relic.geographic_location_id = geographic_location.id\n" +
             "  JOIN relic_categories ON relic.id = relic_categories.relics_id\n" +
-            "WHERE register_number LIKE :register\n" +
-            "      AND identification LIKE :name\n" +
+            "WHERE register_number LIKE %:register%\n" +
+            "      AND identification LIKE %:name%\n" +
             "      AND geographic_location.voivodeship_name LIKE :voivodeship\n" +
+            "      AND geographic_location.place_name LIKE %:place%\n" +
             "      AND relic_categories.categories_category_name LIKE :category\n" +
             "LIMIT 5", nativeQuery = true)
     List<BigInteger> getRelicItemsWithFilter(@Param("name") String name, @Param("register") String register,
-                                             @Param("voivodeship") String voivodeship, @Param("category") String category);
+                                             @Param("voivodeship") String voivodeship, @Param("category") String category,
+                                             @Param("place") String place);
 }

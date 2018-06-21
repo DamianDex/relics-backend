@@ -38,4 +38,12 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
     List<BigInteger> getRelicItemsWithFilter(@Param("name") String name, @Param("register") String register,
                                              @Param("voivodeship") String voivodeship, @Param("category") String category,
                                              @Param("place") String place);
+
+    @Query(value = "Select * from relic \n" +
+            "\tjoin geographic_location on relic.geographic_location_id = geographic_location.id\n" +
+            "\twhere geographic_location.latitude > :minLat and geographic_location.latitude < :maxLat and\n" +
+            "\t      geographic_location.longitude > :minLen and geographic_location.longitude < :maxLen",
+            nativeQuery = true)
+    List<Relic> getRelicsByLocation(@Param("minLat") double minLat, @Param("maxLat") double maxLat,
+                                    @Param("minLen") double minLen, @Param("maxLen") double maxLen);
 }

@@ -2,10 +2,15 @@ package com.relics.backend.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
+import com.relics.backend.distance.utils.BufferParallel;
+import com.relics.backend.distance.utils.DistancePrimaryOperations;
+import com.relics.backend.distance.utils.RelicsInFrameQueryParallel;
 import com.relics.backend.model.Relic;
+import com.relics.backend.model.RouteBuffer;
 import com.relics.backend.recommender.distance.DistanceRecommender;
 import com.relics.backend.recommender.user.UserReviewRecommender;
 import com.relics.backend.repository.RelicRepository;
+import com.vividsolutions.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.*;
 
 @RestController
 @RequestMapping("/api")
@@ -116,6 +122,33 @@ public class RelicController implements BasicController {
             @RequestParam(value = "place", defaultValue = "%") String place) {
         return relicRepository.getRelicItemsWithFilter(name, register, voivodeship, category, place);
     }
+
+    @PostMapping("relics/route-buffer")
+    @ResponseBody
+    public String getRelicsInDistanceFromRoute(@Valid @RequestBody RouteBuffer routeBuffer) {
+        DistancePrimaryOperations dp = new DistancePrimaryOperations();
+        double[] frame = dp.getSearchArea(routeBuffer.getRouteArray(), routeBuffer.getBuffer());
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        Future<List<Relic>> futureRelics = executor.submit(new RelicsInFrameQueryParallel(frame, relicRepository));
+        Future<Polygon> futureBuffer = executor.submit(new BufferParallel(routeBuffer.getRouteArray(), routeBuffer.getBuffer()));
+        executor.shutdown();
+        List<Relic> frameRelics = null;
+        Polygon buffer = null;
+        try {
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+            frameRelics = futureRelics.get();
+            buffer = futureBuffer.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        frameRelics = dp.filterRelicsByBuffer(frameRelics, buffer);
+
+        return "success";
+    }
+
 
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {
         oldRelic.setIdentification(newRelic.getIdentification());

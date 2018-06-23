@@ -5,6 +5,7 @@ import com.vividsolutions.jts.geom.*;
 import org.geotools.referencing.GeodeticCalculator;
 
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,15 @@ public class DistancePrimaryOperations {
                                             new Coordinate(relic.getGeographicLocation().getLatitude(),
                                                            relic.getGeographicLocation().getLongitude()))))
                 .collect(Collectors.toList());
+    }
+
+    public double[][] getBufferPoints(Polygon buffer){
+        List<double[]> pointsList = Arrays.stream(buffer.getCoordinates())
+                .map(coordinate -> new double[]{coordinate.x, coordinate.y})
+                .collect(Collectors.toList());
+        double[][] bufferPoints = new double[pointsList.size()][2];
+
+        return pointsList.toArray(bufferPoints);
     }
 
 }

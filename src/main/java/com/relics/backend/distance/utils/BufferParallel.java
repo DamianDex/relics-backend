@@ -40,7 +40,7 @@ public class BufferParallel implements Callable<Polygon> {
     }
 
     @Override
-    public Polygon call() throws Exception {
+    public Polygon call() {
         return getRouteBuffer(points, buffer);
     }
 
@@ -63,7 +63,7 @@ public class BufferParallel implements Callable<Polygon> {
         Converter converter = converterFactory.createConverter(LineString.class, Polygon.class, hints);
         Polygon polygon = null;
         try {
-            polygon = converter.convert((LineString) bufferGeom.getDefaultGeometry(), Polygon.class);
+            polygon = converter.convert(bufferGeom.getDefaultGeometry(), Polygon.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,6 +145,5 @@ public class BufferParallel implements Callable<Polygon> {
         return geom.buffer(dist);
 
     }
-
 
 }

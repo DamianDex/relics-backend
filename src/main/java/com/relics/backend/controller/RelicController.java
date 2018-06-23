@@ -7,6 +7,7 @@ import com.relics.backend.distance.utils.DistancePrimaryOperations;
 import com.relics.backend.distance.utils.RelicsInFrameQueryParallel;
 import com.relics.backend.model.Relic;
 import com.relics.backend.model.RouteBuffer;
+import com.relics.backend.model.RouteBufferResult;
 import com.relics.backend.recommender.distance.DistanceRecommender;
 import com.relics.backend.recommender.user.UserReviewRecommender;
 import com.relics.backend.repository.RelicRepository;
@@ -123,14 +124,17 @@ public class RelicController implements BasicController {
         return relicRepository.getRelicItemsWithFilter(name, register, voivodeship, category, place);
     }
 
+    @JsonView(View.BasicDescription.class)
     @PostMapping("relics/route-buffer")
     @ResponseBody
-    public String getRelicsInDistanceFromRoute(@Valid @RequestBody RouteBuffer routeBuffer) {
+    public RouteBufferResult getRelicsInDistanceFromRoute(@Valid @RequestBody RouteBuffer routeBuffer) {
+        final double[][] routeArray = routeBuffer.getRouteArray();
+        final double bufferSize = routeBuffer.getBuffer();
         DistancePrimaryOperations dp = new DistancePrimaryOperations();
-        double[] frame = dp.getSearchArea(routeBuffer.getRouteArray(), routeBuffer.getBuffer());
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        double[] frame = dp.getSearchArea(routeArray, bufferSize);
+        ExecutorService executor = Executors.newFixedThreadPool(1);
         Future<List<Relic>> futureRelics = executor.submit(new RelicsInFrameQueryParallel(frame, relicRepository));
-        Future<Polygon> futureBuffer = executor.submit(new BufferParallel(routeBuffer.getRouteArray(), routeBuffer.getBuffer()));
+        Future<Polygon> futureBuffer = executor.submit(new BufferParallel(routeArray, bufferSize));
         executor.shutdown();
         List<Relic> frameRelics = null;
         Polygon buffer = null;
@@ -138,15 +142,12 @@ public class RelicController implements BasicController {
             executor.awaitTermination(1, TimeUnit.MINUTES);
             frameRelics = futureRelics.get();
             buffer = futureBuffer.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         frameRelics = dp.filterRelicsByBuffer(frameRelics, buffer);
-
-        return "success";
+        double[][] bufferPoints = dp.getBufferPoints(buffer);
+        return new RouteBufferResult(frameRelics, bufferPoints);
     }
 
 

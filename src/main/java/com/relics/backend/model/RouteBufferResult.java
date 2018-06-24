@@ -10,7 +10,7 @@ public class RouteBufferResult {
     private List<Relic> relics;
 
     @JsonView(View.BasicDescription.class)
-    private double[][] bufferPoints;
+    private GoogleMapsLocation[] bufferPoints;
 
     public RouteBufferResult(List<Relic> relics, double[][] bufferPoints){
         setRelics(relics);
@@ -25,11 +25,29 @@ public class RouteBufferResult {
         this.relics = relics;
     }
 
-    public double[][] getBufferPoints() {
+    public GoogleMapsLocation[] getBufferPoints() {
         return bufferPoints;
     }
 
     public void setBufferPoints(double[][] bufferPoints) {
-        this.bufferPoints = bufferPoints;
+        this.bufferPoints = new GoogleMapsLocation[bufferPoints.length];
+        for (int i = 0; i < bufferPoints.length; i++){
+            this.bufferPoints[i] = new GoogleMapsLocation(bufferPoints[i][0], bufferPoints[i][1]);
+        }
     }
+
+    private class GoogleMapsLocation {
+
+        @JsonView(View.BasicDescription.class)
+        private final double lat;
+        @JsonView(View.BasicDescription.class)
+        private final double lng;
+
+        public GoogleMapsLocation(double lat, double lng){
+            this.lat = lat;
+            this.lng = lng;
+        }
+
+    }
+
 }

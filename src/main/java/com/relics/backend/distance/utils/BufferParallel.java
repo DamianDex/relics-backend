@@ -33,6 +33,7 @@ public class BufferParallel implements Callable<Polygon> {
     private final DefaultGeographicCRS crs = DefaultGeographicCRS.WGS84;
     private final double[][] points;
     private final double buffer;
+    private boolean swapCoordinates = true;
 
     public BufferParallel(double[][] points, double buffer){
         this.points = points;
@@ -95,13 +96,14 @@ public class BufferParallel implements Callable<Polygon> {
             double x = c.getCoordinate().x;
             double y = c.getCoordinate().y;
 
-            String code = "AUTO:42001," + x + "," + y;
-            // System.out.println(code);
-            CoordinateReferenceSystem auto;
+            CoordinateReferenceSystem intermediaryReferenceSystem;
             try {
-                auto = CRS.decode(code);
-                toTransform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, auto);
-                fromTransform = CRS.findMathTransform(auto, DefaultGeographicCRS.WGS84);
+                intermediaryReferenceSystem = getProperEpsg(x, y);
+                if (swapCoordinates) {
+                    geom.apply(new InvertCoordinateFilter());
+                }
+                toTransform = CRS.findMathTransform(crs, intermediaryReferenceSystem, false);
+                fromTransform = CRS.findMathTransform(intermediaryReferenceSystem, crs, false);
                 pGeom = JTS.transform(geom, toTransform);
             } catch (MismatchedDimensionException | TransformException | FactoryException e) {
                 // TODO Auto-generated catch block
@@ -117,16 +119,20 @@ public class BufferParallel implements Callable<Polygon> {
         if (!(crs instanceof ProjectedCRS)) {
             try {
                 retGeom = JTS.transform(out, fromTransform);
+                if (swapCoordinates) {
+                    retGeom.apply(new InvertCoordinateFilter());
+                }
             } catch (MismatchedDimensionException | TransformException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
+
         // return a new feature containing the geom
         SimpleFeatureType schema = feature.getFeatureType();
         SimpleFeatureTypeBuilder ftBuilder = new SimpleFeatureTypeBuilder();
         ftBuilder.setCRS(crs);
-        // ftBuilder.setDefaultGeometry("buffer");
+
         ftBuilder.addAll(schema.getAttributeDescriptors());
         ftBuilder.setName(schema.getName());
 
@@ -144,6 +150,33 @@ public class BufferParallel implements Callable<Polygon> {
     private Geometry buffer(Geometry geom, double dist) {
         return geom.buffer(dist);
 
+    }
+
+    private CoordinateReferenceSystem getProperEpsg(double lat, double lng) throws FactoryException{
+        CoordinateReferenceSystem coordinateReferenceSystem;
+        if (lng > 13.5 && lng < 16.5){
+            coordinateReferenceSystem = PolishEPSG2000.EPSG2176;
+        } else if (lng >= 16.5 && lng < 19.5){
+            coordinateReferenceSystem = PolishEPSG2000.EPSG2177;
+        } else if (lng >= 19.5 && lng < 22.5) {
+            coordinateReferenceSystem = PolishEPSG2000.EPSG2178;
+        } else if (lng >= 22.5 && lng < 25.5){
+            coordinateReferenceSystem = PolishEPSG2000.EPSG2179;
+        } else {
+            String code = "AUTO:42001," + lat + "," + lng;
+            coordinateReferenceSystem = CRS.decode(code);
+            swapCoordinates = false;
+        }
+
+        return coordinateReferenceSystem;
+    }
+
+    private static class InvertCoordinateFilter implements CoordinateFilter {
+        public void filter(Coordinate coord) {
+            double oldX = coord.x;
+            coord.x = coord.y;
+            coord.y = oldX;
+        }
     }
 
 }

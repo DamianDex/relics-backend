@@ -29,6 +29,7 @@ public class Relic {
 
     @OneToOne(fetch = FetchType.EAGER)
     @Cascade(CascadeType.PERSIST)
+    @JsonView(View.BasicDescription.class)
     public GeographicLocation geographicLocation;
 
     @ManyToMany

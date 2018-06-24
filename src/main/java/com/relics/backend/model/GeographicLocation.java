@@ -16,7 +16,9 @@ public class GeographicLocation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 
+    @JsonView(View.BasicDescription.class)
     public Double latitude;
+    @JsonView(View.BasicDescription.class)
     public Double longitude;
     public String voivodeshipName;
     public String districtName;

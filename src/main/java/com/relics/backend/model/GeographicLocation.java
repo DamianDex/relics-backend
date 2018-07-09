@@ -20,10 +20,15 @@ public class GeographicLocation {
     public Double latitude;
     @JsonView(View.BasicDescription.class)
     public Double longitude;
+    @JsonView(View.BasicDescription.class)
     public String voivodeshipName;
+    @JsonView(View.BasicDescription.class)
     public String districtName;
+    @JsonView(View.BasicDescription.class)
     public String communeName;
+    @JsonView(View.BasicDescription.class)
     public String placeName;
+    @JsonView(View.BasicDescription.class)
     public String street;
 
     public GeographicLocation() {

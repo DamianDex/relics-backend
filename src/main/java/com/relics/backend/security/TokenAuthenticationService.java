@@ -18,7 +18,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -34,7 +33,7 @@ class TokenAuthenticationService {
 	static final ObjectMapper mapper = new ObjectMapper();
 
 	static void addAuthentication(HttpServletResponse res, ApplicationUser applicationUser,
-			Collection<? extends GrantedAuthority> roles) throws JsonProcessingException {
+			Collection<? extends GrantedAuthority> roles) throws IOException {
 		String userJson = mapper.writeValueAsString(applicationUser);
 		Claims claims = Jwts.claims().setSubject(userJson);
 		claims.put("scopes", roles);
@@ -44,7 +43,10 @@ class TokenAuthenticationService {
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET)
 			.compact();
-		res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        res.getWriter().write(applicationUser.getType().getCode());
+		res.getWriter().flush();
+		res.getWriter().close();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -71,4 +73,5 @@ class TokenAuthenticationService {
 		}
 		return null;
 	}
+
 }

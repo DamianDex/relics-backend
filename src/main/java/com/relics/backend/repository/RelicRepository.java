@@ -14,15 +14,17 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
 
     @Query(value = "SELECT * FROM public.relic\n" +
             "JOIN relic_categories ON relic.id = relic_categories.relic_id\n" +
-            "WHERE relic_categories.categories_category_name = :category", nativeQuery = true)
+            "WHERE relic_categories.categories_category_name = :category\n" +
+            "AND approved IS true", nativeQuery = true)
     List<Relic> findByCategory(@Param("category") String category);
 
     @Query(value = "SELECT id FROM public.relic\n" +
+            "WHERE approved IS true\n" +
             "ORDER BY random()" +
             "LIMIT :quantity", nativeQuery = true)
     List<BigInteger> getRandomRelicIDs(@Param("quantity") Integer quantity);
 
-    @Query(value = "SELECT id FROM public.relic\n", nativeQuery = true)
+    @Query(value = "SELECT id FROM public.relic WHERE approved IS true\n", nativeQuery = true)
     List<BigInteger> getAllIDs();
 
     @Query(value = "SELECT relic.id\n" +
@@ -30,6 +32,7 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
             "  JOIN geographic_location ON relic.geographic_location_id = geographic_location.id\n" +
             "  JOIN relic_categories ON relic.id = relic_categories.relics_id\n" +
             "WHERE register_number LIKE %:register%\n" +
+            "      AND approved IS TRUE\n" +
             "      AND identification LIKE %:name%\n" +
             "      AND geographic_location.voivodeship_name LIKE :voivodeship\n" +
             "      AND geographic_location.place_name LIKE %:place%\n" +
@@ -42,7 +45,8 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
     @Query(value = "Select * from relic \n" +
             "\tjoin geographic_location on relic.geographic_location_id = geographic_location.id\n" +
             "\twhere geographic_location.latitude > :minLat and geographic_location.latitude < :maxLat and\n" +
-            "\t      geographic_location.longitude > :minLen and geographic_location.longitude < :maxLen",
+            "\t      geographic_location.longitude > :minLen and geographic_location.longitude < :maxLen and\n" +
+            "\t      approved is true",
             nativeQuery = true)
     List<Relic> getRelicsByLocation(@Param("minLat") double minLat, @Param("maxLat") double maxLat,
                                     @Param("minLen") double minLen, @Param("maxLen") double maxLen);

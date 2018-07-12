@@ -1,11 +1,9 @@
 package com.relics.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -40,6 +38,9 @@ public class Relic {
 
     @JsonView(View.BasicDescription.class)
     public String datingOfObject;
+
+    @JsonView(View.BasicDescription.class)
+    private Boolean approved;
 
     @OneToMany
     public Set<Review> reviews;
@@ -106,6 +107,14 @@ public class Relic {
 
     public void setDatingOfObject(String datingOfObject) {
         this.datingOfObject = datingOfObject;
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
     }
 
     public Set<Review> getReviews() {

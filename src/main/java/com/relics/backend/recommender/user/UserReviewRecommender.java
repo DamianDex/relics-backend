@@ -88,7 +88,7 @@ public class UserReviewRecommender {
             List<RecommendedItem> recommendations =
                     cachingRecommender.recommend(loginUtils.getLoggedUser().getId(), 3);
 
-            if (recommendations.isEmpty()) {
+            if (recommendations.size() < 3) {
                 return Collections.emptyList();
             }
 

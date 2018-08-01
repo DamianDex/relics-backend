@@ -27,9 +27,10 @@ public class CustomDecisionManager implements AccessDecisionManager{
 			String neededPermission = configAttribute.getAttribute();
 			System.out.println("Needed permision is: " + neededPermission);
 			for (GrantedAuthority ga: auth.getAuthorities()){
-				if (neededPermission.equals(ga.getAuthority()))
+				if (neededPermission.equals(ga.getAuthority())){
 					System.out.println("Authorization granted");
 					return;
+				}
 			}
 		}
 		throw new AccessDeniedException("You don't have permission to access");

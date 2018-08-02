@@ -150,6 +150,30 @@ public class RelicController implements BasicController {
         return new RouteBufferResult(frameRelics, bufferPoints);
     }
 
+    @GetMapping("admin/districts")
+    @ResponseBody
+    public List<String> getDistrictNames(
+            @RequestParam(value = "voivodeship", defaultValue = "") String voivodeship) {
+        return relicRepository.getDistrictNames(voivodeship);
+    }
+
+    @GetMapping("admin/communes")
+    @ResponseBody
+    public List<String> getCommuneNames(
+            @RequestParam(value = "voivodeship", defaultValue = "") String voivodeship,
+            @RequestParam(value = "districtName", defaultValue = "") String districtName) {
+        return relicRepository.getCommmuneNames(voivodeship, districtName);
+    }
+
+    @GetMapping("admin/places")
+    @ResponseBody
+    public List<String> getPlaces(
+            @RequestParam(value = "voivodeship", defaultValue = "") String voivodeship,
+            @RequestParam(value = "districtName", defaultValue = "") String districtName,
+            @RequestParam(value = "communeName", defaultValue = "") String communeName) {
+        return relicRepository.getPlaceNames(voivodeship, districtName, communeName);
+    }
+
 
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {
         oldRelic.setIdentification(newRelic.getIdentification());

@@ -68,4 +68,23 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
             "AND relic_categories.categories_category_name LIKE :category\n" ,nativeQuery = true)
     List<BigInteger> getRelicsReviewdByUserDefault(@Param("id") Long id,
                                             @Param("category") String category);
+
+    @Query(value = "Select distinct district_name from geographic_location \n" +
+            "\twhere :voivodeship = '' or voivodeship_name = :voivodeship\n" +
+            "\torder by district_name", nativeQuery = true)
+    List<String> getDistrictNames(@Param("voivodeship") String voivodeship);
+
+    @Query(value = "Select distinct commune_name from geographic_location \n" +
+            "\twhere :voivodeship = '' or voivodeship_name = :voivodeship and\n" +
+            "\t      :districtName = '' or district_name = :districtName\n " +
+            "\torder by commune_name", nativeQuery = true)
+    List<String> getCommmuneNames(@Param("voivodeship") String voivodeship, @Param("districtName") String districtName);
+
+    @Query(value = "Select distinct place_name from geographic_location \n" +
+            "\twhere :voivodeship = '' or voivodeship_name = :voivodeship and\n" +
+            "\t      :districtName = '' or district_name = :districtName and\n" +
+            "\t      :communeName = '' or commune_name = :communeName\n" +
+            "\torder by place_name", nativeQuery = true)
+    List<String> getPlaceNames(@Param("voivodeship") String voivodeship, @Param("districtName") String districtName,
+                               @Param("communeName") String communeName);
 }

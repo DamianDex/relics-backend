@@ -50,6 +50,11 @@ public class AppUserController implements BasicController {
         }
     }
 
+    @GetMapping("/admin")
+    public Boolean isAdmin(){
+        return true;
+    }
+
     @PostMapping("/my-profile")
     public String getProfileInfo() {
         System.out.println(loginUtils.getLoggedUser().toString());

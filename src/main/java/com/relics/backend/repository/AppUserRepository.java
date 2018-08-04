@@ -25,4 +25,7 @@ public interface AppUserRepository extends JpaRepository<ApplicationUser, Long> 
 			+ "(SELECT true FROM application_user WHERE username = :username)", nativeQuery=true)
 	boolean userExists(@Param("username") String username);
 
+	@Query(value = "SELECT * FROM application_user WHERE application_user.id = :id",nativeQuery = true)
+	ApplicationUser getApplicationUserById(@Param("id") Long id);
+
 }

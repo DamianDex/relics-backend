@@ -11,6 +11,7 @@ import com.relics.backend.model.RouteBufferResult;
 import com.relics.backend.recommender.distance.DistanceRecommender;
 import com.relics.backend.recommender.user.UserReviewRecommender;
 import com.relics.backend.repository.RelicRepository;
+import com.relics.backend.security.LoginUtils;
 import com.vividsolutions.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,9 @@ public class RelicController implements BasicController {
 
     @Autowired
     private UserReviewRecommender recommendRelicsByUserReviews;
+
+    @Autowired
+    private LoginUtils loginUtils;
 
     @PostMapping("/relics")
     public void createNewRelic(@Valid @RequestBody Relic relic) {
@@ -148,6 +152,18 @@ public class RelicController implements BasicController {
         frameRelics = dp.filterRelicsByBuffer(frameRelics, buffer);
         double[][] bufferPoints = dp.getBufferPoints(buffer);
         return new RouteBufferResult(frameRelics, bufferPoints);
+    }
+
+    @GetMapping("/my-reviews")
+    @ResponseBody
+    public List<BigInteger> getRelicsReviewdByUser(
+    @RequestParam(value = "vote", defaultValue = "") Integer vote,
+    @RequestParam(value = "category", defaultValue = "%") String category){
+        Long userId = loginUtils.getLoggedUser().getId();
+        if(vote == null){
+            return relicRepository.getRelicsReviewdByUserDefault(userId,category);
+        }
+        return relicRepository.getRelicsReviewdByUser(userId,category,vote);
     }
 
 

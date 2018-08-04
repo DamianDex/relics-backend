@@ -50,4 +50,22 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
             nativeQuery = true)
     List<Relic> getRelicsByLocation(@Param("minLat") double minLat, @Param("maxLat") double maxLat,
                                     @Param("minLen") double minLen, @Param("maxLen") double maxLen);
+
+    @Query(value = "SELECT relic.id FROM relic \n" +
+                    "JOIN review on review.relic_id = relic.id\n" +
+                    "JOIN relic_categories on relic.id = relic_categories.relics_id\n" +
+                    "WHERE review.app_user_id = :id\n" +
+                        "AND relic_categories.categories_category_name LIKE :category\n" +
+                        "AND review.rating = :vote",nativeQuery = true)
+    List<BigInteger> getRelicsReviewdByUser(@Param("id") Long id,
+                                            @Param("category") String category,
+                                            @Param("vote") Integer vote);
+
+    @Query(value = "SELECT relic.id FROM relic \n" +
+            "JOIN review on review.relic_id = relic.id\n" +
+            "JOIN relic_categories on relic.id = relic_categories.relics_id\n" +
+            "WHERE review.app_user_id = :id\n" +
+            "AND relic_categories.categories_category_name LIKE :category\n" ,nativeQuery = true)
+    List<BigInteger> getRelicsReviewdByUserDefault(@Param("id") Long id,
+                                            @Param("category") String category);
 }

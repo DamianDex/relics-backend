@@ -8,18 +8,18 @@ import com.relics.backend.repository.UserTypesRepository;
 import com.relics.backend.security.LoginUtils;
 import com.relics.backend.security.model.RegistrationBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(value = "http://localhost:3000")
 public class AppUserController implements BasicController {
 
     @Autowired
@@ -74,4 +74,25 @@ public class AppUserController implements BasicController {
         return Messages.LOGGED_OUT;
     }
 
+    @GetMapping("/my-profile")
+    @ResponseBody
+    public ApplicationUser getApplicationUserById(){
+        Long userId = loginUtils.getLoggedUser().getId();
+        ApplicationUser applicationUser = appUserRepository.getApplicationUserById(userId);
+        return appUserRepository.getApplicationUserById(userId);
+    }
+
+
+    @PutMapping("/my-profile/{userId}")
+    public ResponseEntity<ApplicationUser> updateUser(@Valid @RequestBody ApplicationUser updateApplicationUser){
+        Long userId = loginUtils.getLoggedUser().getId();
+        ApplicationUser applicationUser = appUserRepository.getApplicationUserById(userId);
+        applicationUser.setUsername(updateApplicationUser.getUsername());
+        applicationUser.setFirstName(updateApplicationUser.getFirstName());
+        applicationUser.setLastName(updateApplicationUser.getLastName());
+        applicationUser.setEmail(updateApplicationUser.getEmail());
+        applicationUser.setProfileImage(updateApplicationUser.getProfileImage());
+        appUserRepository.save(updateApplicationUser);
+        return  ResponseEntity.ok(updateApplicationUser);
+    }
 }

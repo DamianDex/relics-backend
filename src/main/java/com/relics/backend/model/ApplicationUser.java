@@ -21,7 +21,21 @@ public class ApplicationUser implements UserDetails {
 
     @JsonView(View.BasicDescription.class)
     private String username;
+
+    @JsonView(View.BasicDescription.class)
     private String password;
+
+    @JsonView(View.BasicDescription.class)
+    private String email;
+
+    @JsonView(View.BasicDescription.class)
+    private String firstName;
+
+    @JsonView(View.BasicDescription.class)
+    private String lastName;
+
+    @JsonView(View.BasicDescription.class)
+    private String profileImage;
 
     @ManyToOne
     private UserTypes type;
@@ -127,6 +141,38 @@ public class ApplicationUser implements UserDetails {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     @Override

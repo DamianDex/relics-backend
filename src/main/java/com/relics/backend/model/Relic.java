@@ -31,6 +31,7 @@ public class Relic {
     public GeographicLocation geographicLocation;
 
     @ManyToMany
+    @JsonView(View.BasicDescription.class)
     public Set<Category> categories;
 
     @JsonView(View.BasicDescription.class)

@@ -1,5 +1,7 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.relics.backend.View;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -15,6 +17,7 @@ import java.util.List;
 public class Category {
 
     @Id
+    @JsonView(View.BasicDescription.class)
     public String categoryName;
 
     public String categoryDescription;

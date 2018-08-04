@@ -8,6 +8,7 @@ import com.relics.backend.repository.UserTypesRepository;
 import com.relics.backend.security.LoginUtils;
 import com.relics.backend.security.model.RegistrationBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -87,17 +88,14 @@ public class AppUserController implements BasicController {
         return appUserRepository.getApplicationUserById(userId);
     }
 
-
-    @PutMapping("/my-profile/{userId}")
-    public ResponseEntity<ApplicationUser> updateUser(@Valid @RequestBody ApplicationUser updateApplicationUser){
-        Long userId = loginUtils.getLoggedUser().getId();
-        ApplicationUser applicationUser = appUserRepository.getApplicationUserById(userId);
+    @PostMapping("/my-profile/{userId}")
+    public void updateUser(@Valid @RequestBody ApplicationUser updateApplicationUser, @PathVariable Long userId){
+        ApplicationUser applicationUser = appUserRepository.findOne(userId);
         applicationUser.setUsername(updateApplicationUser.getUsername());
         applicationUser.setFirstName(updateApplicationUser.getFirstName());
         applicationUser.setLastName(updateApplicationUser.getLastName());
         applicationUser.setEmail(updateApplicationUser.getEmail());
         applicationUser.setProfileImage(updateApplicationUser.getProfileImage());
-        appUserRepository.save(updateApplicationUser);
-        return  ResponseEntity.ok(updateApplicationUser);
+        appUserRepository.save(applicationUser);
     }
 }

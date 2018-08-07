@@ -1,5 +1,6 @@
 package com.relics.backend.controller;
 
+import com.relics.backend.model.ApplicationUser;
 import com.relics.backend.model.Relic;
 import com.relics.backend.model.RelicsToSee;
 import com.relics.backend.repository.RelicsToSeeRepository;
@@ -24,8 +25,17 @@ public class RelicsToSeeController {
 
     @PostMapping("/relics/relics-to-see")
     public void createNewRelicToSee(@Valid @RequestBody RelicsToSee relicsToSee){
-        relicsToSee.setAppUser(loginUtils.getLoggedUser());
-        relicsToSeeRepository.save(relicsToSee);
+        ApplicationUser applicationUser = loginUtils.getLoggedUser();
+        Long userId = applicationUser.getId();
+        Long relicId = relicsToSee.getRelic().getId();
+        RelicsToSee relicsToSeeOld = relicsToSeeRepository.getRelicToSee(relicId,userId);
+        if(relicsToSeeOld != null){
+            relicsToSeeOld.setRelicToSee(relicsToSee.isRelicToSee());
+            relicsToSeeRepository.save(relicsToSeeOld);
+        } else{
+            relicsToSee.setAppUser(applicationUser);
+            relicsToSeeRepository.save(relicsToSee);
+        }
     }
 
     @GetMapping("relics/{id}/isChecked")

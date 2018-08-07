@@ -87,4 +87,23 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
             "\torder by place_name", nativeQuery = true)
     List<String> getPlaceNames(@Param("voivodeship") String voivodeship, @Param("districtName") String districtName,
                                @Param("communeName") String communeName);
+
+    @Query(value = "Select r.id from relic as r\n" +
+                    "\t     join relic_categories as c on r.id = c.relics_id\n" +
+                    "\t     join geographic_location as g on r.geographic_location_id = g.id\n" +
+                    "\t     where r.approved = :approved\n" +
+                    "\t\t       and c.categories_category_name like %:category%\n" +
+                    "\t\t       and g.voivodeship_name like %:voivodeship%\n" +
+                    "\t\t       and g.district_name like %:districtName%\n" +
+                    "\t\t       and g.commune_name like %:communeName%\n" +
+                    "\t\t       and g.place_name like %:placeName%\n" +
+                    "\t\t       and r.identification like %:name% order by r.id " +
+                    "\t\t       offset :offset limit 5\n", nativeQuery = true)
+    List<BigInteger> getFilteredRelics(@Param("name") String name, @Param("approved") boolean approved,
+                                  @Param("category") String category, @Param("voivodeship") String voivodeship,
+                                  @Param("districtName") String districtName, @Param("communeName") String communeName,
+                                  @Param("placeName") String placeName, @Param("offset") Integer offset);
+
+    @Query(value = "Update relic set approved = :approved where id = :id returning true", nativeQuery = true)
+    boolean updateRelicStatus(@Param("id") Long id, @Param("approved") Boolean approved);
 }

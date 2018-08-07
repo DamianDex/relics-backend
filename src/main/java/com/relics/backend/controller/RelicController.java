@@ -191,6 +191,35 @@ public class RelicController implements BasicController {
     }
 
 
+    @GetMapping("admin/filter")
+    @ResponseBody
+    public List<BigInteger> getFilteredRelics(
+            @RequestParam(value = "name", defaultValue = "") String name,
+            @RequestParam(value = "approved", defaultValue = "true") String approved,
+            @RequestParam(value = "category", defaultValue = "") String category,
+            @RequestParam(value = "voivodeship", defaultValue = "") String voivodeship,
+            @RequestParam(value = "districtName", defaultValue = "") String districtName,
+            @RequestParam(value = "communeName", defaultValue = "") String communeName,
+            @RequestParam(value = "placeName", defaultValue = "") String placeName,
+            @RequestParam(value = "offset", defaultValue = "0") String offset){
+        return relicRepository.getFilteredRelics(name, Boolean.parseBoolean(approved), category, voivodeship,
+                districtName, communeName, placeName, Integer.parseInt(offset));
+    }
+
+    @GetMapping("admin/update-status")
+    @ResponseBody
+    public ResponseEntity<Boolean> updateRelicStatus(
+            @RequestParam(value = "id", defaultValue = "0") String id,
+            @RequestParam(value = "approved", defaultValue = "") String approved) {
+        try {
+            relicRepository.updateRelicStatus(Long.parseLong(id), Boolean.parseBoolean(approved));
+        } catch (Exception e){
+            return getUpdateFailedEntity();
+        }
+        return ResponseEntity.ok(true);
+    }
+
+
     private Relic updateRelic(Relic oldRelic, Relic newRelic) {
         oldRelic.setIdentification(newRelic.getIdentification());
         return oldRelic;

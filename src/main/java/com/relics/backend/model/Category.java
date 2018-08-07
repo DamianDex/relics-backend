@@ -1,5 +1,6 @@
 package com.relics.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.relics.backend.View;
 import org.hibernate.annotations.Cascade;
@@ -23,6 +24,7 @@ public class Category {
     public String categoryDescription;
 
     @ManyToMany (mappedBy = "categories")
+    @JsonIgnore
     public List<Relic> relics;
 
     public Category() {

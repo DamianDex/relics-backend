@@ -9,4 +9,8 @@ public interface BasicController {
         return ResponseEntity.notFound().build();
     }
 
+    default ResponseEntity<Boolean> getUpdateFailedEntity(){
+        return ResponseEntity.notFound().build();
+    }
+
 }

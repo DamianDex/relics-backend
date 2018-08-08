@@ -28,7 +28,8 @@ public interface RelicsToSeeRepository extends JpaRepository<RelicsToSee, Long> 
             "WHERE relics_to_see.app_user_id = :userId\n" +
             "      AND geographic_location.place_name LIKE :place\n" +
             "      AND relic_categories.categories_category_name LIKE :category\n" +
-            "      AND relics_to_see.relic_to_see IS true", nativeQuery = true)
+            "      AND relics_to_see.relic_to_see IS true\n" +
+            "      AND approved IS true", nativeQuery = true)
     List<BigInteger> getRelicsToSeeByUser(@Param("userId") Long userId, @Param("category") String category,
                                              @Param("place") String place);
 

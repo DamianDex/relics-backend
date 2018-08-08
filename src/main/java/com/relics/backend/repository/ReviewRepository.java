@@ -22,6 +22,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query(value = "SELECT relic_id\n" +
             "FROM review\n" +
+            "JOIN relic ON review.relic_id = relic.id\n" +
             "GROUP BY relic_id\n" +
             "ORDER BY AVG(rating) DESC\n" +
             "LIMIT :quantity", nativeQuery = true)
@@ -34,6 +35,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "JOIN geographic_location ON relic.geographic_location_id = geographic_location.id\n" +
             "WHERE relic_categories.categories_category_name LIKE :category\n" +
             "AND geographic_location.voivodeship_name LIKE :voivodeship\n" +
+            "AND relic.approved IS true\n" +
             "GROUP BY relic_id\n" +
             "ORDER BY AVG(rating) DESC\n" +
             "LIMIT :quantity", nativeQuery = true)

@@ -100,7 +100,7 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
                     "\t\t       and g.commune_name like %:communeName%\n" +
                     "\t\t       and g.place_name like %:placeName%\n" +
                     "\t\t       and r.identification like %:name% order by r.id " +
-                    "\t\t       offset :offset limit 5\n", nativeQuery = true)
+                    "offset :offset limit 5\n", nativeQuery = true)
     List<BigInteger> getFilteredRelics(@Param("name") String name, @Param("approved") boolean approved,
                                   @Param("category") String category, @Param("voivodeship") String voivodeship,
                                   @Param("districtName") String districtName, @Param("communeName") String communeName,
